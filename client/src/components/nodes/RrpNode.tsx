@@ -66,19 +66,19 @@ export const RrpNode = memo(({ id, data }: RrpNodeProps) => {
         type="target"
         position={Position.Top}
         id="top-target"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !z-50"
         style={{ top: -8 }}
       />
 
       {/* Header */}
-      <div className="w-full bg-green-100 border-b border-green-200 px-2 py-1 mb-2 rounded-t">
-        <div className="text-sm font-semibold text-green-800 text-center">
+      <div className="w-full bg-green-300 border-b border-green-400 px-4 py-3 mb-4 rounded-t">
+        <div className="text-lg font-bold text-white text-center">
           RRP#{data.rrpId}
         </div>
       </div>
 
       {/* RRP Name */}
-      <div className="w-full text-center text-lg mb-2">
+      <div className="w-full text-center text-lg mb-4">
         {isEditingName ? (
           <input
             className="text-base p-3 w-full border border-gray-300 rounded text-center"
@@ -105,7 +105,7 @@ export const RrpNode = memo(({ id, data }: RrpNodeProps) => {
       </div>
 
       {/* PLMN Field */}
-      <div className="w-full text-center mb-2">
+      <div className="w-full text-center mb-4">
         <RrpPlmnField
           label="PLMN"
           value={plmn}
@@ -135,7 +135,7 @@ export const RrpNode = memo(({ id, data }: RrpNodeProps) => {
         type="source"
         position={Position.Bottom}
         id="bottom-source"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !z-50"
         style={{ bottom: -8 }}
         isConnectable={true}
       />

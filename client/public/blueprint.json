@@ -1,0 +1,2552 @@
+{
+  "nodes": [
+    {
+      "id": "northstar-1",
+      "type": "customNode",
+      "position": {
+        "x": -51.947831355178096,
+        "y": 107.65313525231804
+      },
+      "data": {
+        "label": "NorthStar",
+        "type": "northstar",
+        "description": "Super top-level network controller",
+        "ensureVisible": true,
+        "forceVisible": true,
+        "visibilityEnforced": true,
+        "preventHiding": true,
+        "nodeId": "northstar-1"
+      },
+      "style": {
+        "visibility": "visible",
+        "display": "flex",
+        "opacity": 1,
+        "zIndex": 3000,
+        "borderWidth": "0px",
+        "boxShadow": "0 6px 16px rgba(0, 0, 0, 0.2)"
+      },
+      "draggable": true,
+      "selectable": true,
+      "deletable": false,
+      "measured": {
+        "width": 372,
+        "height": 185
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "network-1",
+      "type": "customNode",
+      "position": {
+        "x": -51.947831355178096,
+        "y": 527.6531352523181
+      },
+      "data": {
+        "type": "network",
+        "label": "NETWORK",
+        "parentId": "northstar-1",
+        "nodeId": "network-1",
+        "networkName": "Org 1",
+        "lpgValue": "lpg99",
+        "nodeNumber": 1
+      },
+      "measured": {
+        "width": 270,
+        "height": 181
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "cell-area-1",
+      "type": "customNode",
+      "position": {
+        "x": -1133.447831355178,
+        "y": 947.6531352523181
+      },
+      "data": {
+        "type": "cell-area",
+        "label": "Private Area",
+        "parentId": "network-1",
+        "nodeId": "cell-area-1",
+        "cellAreaId": 1,
+        "cellAreaDescription": "Private Area",
+        "nodeNumber": 1,
+        "id": "cell-area-1",
+        "notes": "Private area isolated from public subscribers with specific TAC(s)",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 218,
+        "height": 201
+      },
+      "selected": false
+    },
+    {
+      "id": "cell-area-2",
+      "type": "customNode",
+      "position": {
+        "x": 1142.052168644822,
+        "y": 947.6531352523181
+      },
+      "data": {
+        "type": "cell-area",
+        "label": "Public Area",
+        "parentId": "network-1",
+        "nodeId": "cell-area-2",
+        "cellAreaId": 2,
+        "cellAreaDescription": "Public Area",
+        "nodeNumber": 2,
+        "id": "cell-area-2",
+        "notes": "Public area with specified TAC(s)",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 218,
+        "height": 201
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrp-1",
+      "type": "customNode",
+      "position": {
+        "x": -2055.447831355178,
+        "y": 1367.653135252318
+      },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-1",
+        "nodeId": "rrp-1",
+        "rrpId": 1,
+        "rrpPercentage": 100,
+        "rrpName": "Private",
+        "rrpBands": [
+          {
+            "name": "n78",
+            "dl": 50,
+            "ul": 50
+          },
+          {
+            "name": "n28",
+            "dl": 50,
+            "ul": 50
+          }
+        ],
+        "nodeNumber": 1,
+        "description": "Node",
+        "rrpFiveQI": [
+          {
+            "value": "6"
+          },
+          {
+            "value": "7"
+          },
+          {
+            "value": "8"
+          },
+          {
+            "value": "9"
+          },
+          {
+            "value": "79"
+          }
+        ]
+      },
+      "measured": {
+        "width": 355,
+        "height": 522
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrp-2",
+      "type": "customNode",
+      "position": {
+        "x": -653.4478313551781,
+        "y": 1367.653135252318
+      },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-1",
+        "nodeId": "rrp-2",
+        "rrpId": 2,
+        "rrpPercentage": 100,
+        "rrpName": "Premium",
+        "rrpBands": [
+          {
+            "name": "n78",
+            "dl": 10,
+            "ul": 10
+          },
+          {
+            "name": "n28",
+            "dl": 10,
+            "ul": 10
+          }
+        ],
+        "nodeNumber": 2,
+        "description": "Node",
+        "rrpFiveQI": [
+          {
+            "value": "7"
+          },
+          {
+            "value": "9"
+          },
+          {
+            "value": "79"
+          }
+        ]
+      },
+      "measured": {
+        "width": 355,
+        "height": 522
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrp-3",
+      "type": "customNode",
+      "position": {
+        "x": 238.5521686448219,
+        "y": 1367.653135252318
+      },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-1",
+        "nodeId": "rrp-3",
+        "rrpId": 3,
+        "rrpPercentage": 100,
+        "rrpName": "Basic",
+        "rrpFiveQI": [
+          {
+            "value": "9"
+          }
+        ],
+        "rrpBands": [
+          {
+            "name": "n78",
+            "dl": 10,
+            "ul": 10
+          },
+          {
+            "name": "n28",
+            "dl": 10,
+            "ul": 10
+          }
+        ],
+        "nodeNumber": 3,
+        "description": "Node"
+      },
+      "measured": {
+        "width": 355,
+        "height": 522
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-1",
+      "type": "customNode",
+      "position": {
+        "x": -2723.447831355178,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-1",
+        "nodeId": "rrpmember-1",
+        "plmnValue": "240 01",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-2",
+      "type": "customNode",
+      "position": {
+        "x": -1914.447831355178,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-1",
+        "nodeId": "rrpmember-2",
+        "plmnValue": "240 49",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-3",
+      "type": "customNode",
+      "position": {
+        "x": -1100.447831355178,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-2",
+        "nodeId": "rrpmember-3",
+        "plmnValue": "240 01",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-4",
+      "type": "customNode",
+      "position": {
+        "x": -512.4478313551781,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-2",
+        "nodeId": "rrpmember-4",
+        "plmnValue": "240 49",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-5",
+      "type": "customNode",
+      "position": {
+        "x": 80.5521686448219,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-3",
+        "nodeId": "rrpmember-5",
+        "plmnValue": "240 01",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-6",
+      "type": "customNode",
+      "position": {
+        "x": 376.5521686448219,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-3",
+        "nodeId": "rrpmember-6",
+        "plmnValue": "240 49",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "s-nssai-1",
+      "type": "customNode",
+      "position": {
+        "x": -2034.447831355178,
+        "y": 2547.653135252318
+      },
+      "data": {
+        "type": "s-nssai",
+        "label": "S-NSSAI",
+        "parentId": "rrpmember-2",
+        "nodeId": "s-nssai-1",
+        "snssaiId": 1,
+        "sd": "1",
+        "sst": "2018",
+        "nodeNumber": 1
+      },
+      "measured": {
+        "width": 271,
+        "height": 275
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "s-nssai-3",
+      "type": "customNode",
+      "position": {
+        "x": 109.5521686448219,
+        "y": 2547.653135252318
+      },
+      "data": {
+        "type": "s-nssai",
+        "label": "S-NSSAI",
+        "parentId": "rrpmember-4",
+        "nodeId": "s-nssai-3",
+        "snssaiId": 3,
+        "sd": "1",
+        "sst": "2015",
+        "nodeNumber": 3
+      },
+      "measured": {
+        "width": 271,
+        "height": 275
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "s-nssai-4",
+      "type": "customNode",
+      "position": {
+        "x": 835.5521686448219,
+        "y": 2547.653135252318
+      },
+      "data": {
+        "type": "s-nssai",
+        "label": "S-NSSAI",
+        "parentId": "rrpmember-6",
+        "nodeId": "s-nssai-4",
+        "snssaiId": 4,
+        "sd": "1",
+        "sst": "2014",
+        "nodeNumber": 4
+      },
+      "measured": {
+        "width": 271,
+        "height": 275
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "dnn-1",
+      "type": "customNode",
+      "position": {
+        "x": -2561.447831355178,
+        "y": 2997.653135252318
+      },
+      "data": {
+        "type": "dnn",
+        "label": "DNN",
+        "parentId": "s-nssai-1",
+        "nodeId": "dnn-1",
+        "dnnId": 1,
+        "dnnCustomName": "orgx.lpg99.abc.ns",
+        "nodeNumber": 1,
+        "dataRadioSelected": false
+      },
+      "measured": {
+        "width": 463,
+        "height": 253
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "dnn-3",
+      "type": "customNode",
+      "position": {
+        "x": 89.5521686448219,
+        "y": 2997.653135252318
+      },
+      "data": {
+        "type": "dnn",
+        "label": "DNN",
+        "parentId": "s-nssai-3",
+        "nodeId": "dnn-3",
+        "dnnId": 3,
+        "dnnCustomName": "orgx.lpg99.ghi.ns",
+        "nodeNumber": 3
+      },
+      "measured": {
+        "width": 463,
+        "height": 253
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "dnn-4",
+      "type": "customNode",
+      "position": {
+        "x": 815.5521686448219,
+        "y": 2997.653135252318
+      },
+      "data": {
+        "type": "dnn",
+        "label": "DNN",
+        "parentId": "s-nssai-4",
+        "nodeId": "dnn-4",
+        "dnnId": 4,
+        "dnnCustomName": "orgx.lpg99.jkl.ns",
+        "nodeNumber": 4
+      },
+      "measured": {
+        "width": 463,
+        "height": 253
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrp-4",
+      "type": "customNode",
+      "position": {
+        "x": 830.5521686448219,
+        "y": 1367.653135252318
+      },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-2",
+        "nodeId": "rrp-4",
+        "rrpId": 4,
+        "rrpPercentage": 100,
+        "rrpName": "Premium",
+        "rrpBands": [
+          {
+            "name": "n78",
+            "dl": 10,
+            "ul": 10
+          },
+          {
+            "name": "n28",
+            "dl": 10,
+            "ul": 10
+          }
+        ],
+        "nodeNumber": 4,
+        "description": "Node",
+        "rrpFiveQI": [
+          {
+            "value": "7"
+          },
+          {
+            "value": "9"
+          },
+          {
+            "value": "79"
+          }
+        ]
+      },
+      "measured": {
+        "width": 355,
+        "height": 522
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrp-5",
+      "type": "customNode",
+      "position": {
+        "x": 1396.552168644822,
+        "y": 1367.653135252318
+      },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-2",
+        "nodeId": "rrp-5",
+        "rrpId": 5,
+        "rrpPercentage": 100,
+        "rrpName": "Basic",
+        "rrpFiveQI": [
+          {
+            "value": "9"
+          }
+        ],
+        "rrpBands": [
+          {
+            "name": "n78",
+            "dl": 50,
+            "ul": 50
+          },
+          {
+            "name": "n28",
+            "dl": 50,
+            "ul": 50
+          }
+        ],
+        "nodeNumber": 5,
+        "description": "Node"
+      },
+      "measured": {
+        "width": 355,
+        "height": 522
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-7",
+      "type": "customNode",
+      "position": {
+        "x": 689.5521686448219,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-4",
+        "nodeId": "rrpmember-7",
+        "plmnValue": "240 01",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-8",
+      "type": "customNode",
+      "position": {
+        "x": 971.5521686448219,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-4",
+        "nodeId": "rrpmember-8",
+        "plmnValue": "240 49",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-9",
+      "type": "customNode",
+      "position": {
+        "x": 1258.552168644822,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-5",
+        "nodeId": "rrpmember-9",
+        "plmnValue": "240 01",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "rrpmember-10",
+      "type": "customNode",
+      "position": {
+        "x": 1534.552168644822,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-5",
+        "nodeId": "rrpmember-10",
+        "plmnValue": "240 49",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 179,
+        "height": 125
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "cell-area-3",
+      "type": "customNode",
+      "position": {
+        "x": 2223.552168644822,
+        "y": 947.6531352523181
+      },
+      "data": {
+        "type": "cell-area",
+        "label": "CELL-AREA Node",
+        "parentId": "network-1",
+        "nodeId": "cell-area-3",
+        "cellAreaId": 3,
+        "cellAreaDescription": "",
+        "description": "Node",
+        "nodeNumber": 3,
+        "id": "cell-area-3",
+        "notes": "Dedicated area with local spectrum"
+      },
+      "measured": {
+        "width": 218,
+        "height": 169
+      },
+      "selected": false
+    },
+    {
+      "id": "rrp-6",
+      "type": "customNode",
+      "position": {
+        "x": 2193.552168644822,
+        "y": 1367.653135252318
+      },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-3",
+        "nodeId": "rrp-6",
+        "rrpId": 6,
+        "rrpPercentage": 100,
+        "nodeNumber": 6,
+        "rrpBands": [
+          {
+            "name": "n78",
+            "dl": 100,
+            "ul": 100
+          }
+        ],
+        "description": "Node",
+        "rrpFiveQI": [
+          {
+            "value": "6"
+          },
+          {
+            "value": "7"
+          },
+          {
+            "value": "9"
+          },
+          {
+            "value": "79"
+          }
+        ]
+      },
+      "measured": {
+        "width": 355,
+        "height": 465
+      },
+      "selected": false
+    },
+    {
+      "id": "rrpmember-11",
+      "type": "customNode",
+      "position": {
+        "x": 2253.552168644822,
+        "y": 2007.653135252318
+      },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-6",
+        "nodeId": "rrpmember-11",
+        "plmnValue": "999 049",
+        "description": "Node"
+      },
+      "measured": {
+        "width": 181,
+        "height": 125
+      }
+    },
+    {
+      "id": "s-nssai-5",
+      "type": "customNode",
+      "position": {
+        "x": 2133.552168644822,
+        "y": 2547.653135252318
+      },
+      "data": {
+        "type": "s-nssai",
+        "label": "S-NSSAI",
+        "parentId": "rrpmember-11",
+        "nodeId": "s-nssai-5",
+        "snssaiId": 5,
+        "sd": "1",
+        "sst": "2017",
+        "nodeNumber": 5
+      },
+      "measured": {
+        "width": 271,
+        "height": 275
+      },
+      "selected": false
+    },
+    {
+      "id": "dnn-5",
+      "type": "customNode",
+      "position": {
+        "x": 2113.552168644822,
+        "y": 2997.653135252318
+      },
+      "data": {
+        "type": "dnn",
+        "label": "DNN",
+        "parentId": "s-nssai-5",
+        "nodeId": "dnn-5",
+        "dnnId": 5,
+        "nodeNumber": 5,
+        "dnnCustomName": "orgx.lpg99.mno.ns"
+      },
+      "measured": {
+        "width": 463,
+        "height": 253
+      },
+      "selected": false
+    },
+    {
+      "id": "dnn-6",
+      "type": "customNode",
+      "position": {
+        "x": -1833.447831355178,
+        "y": 2997.653135252318
+      },
+      "data": {
+        "type": "dnn",
+        "label": "DNN",
+        "parentId": "s-nssai-1",
+        "nodeId": "dnn-6",
+        "dnnId": 6,
+        "nodeNumber": 6,
+        "dnnCustomName": "orgx.lpg99.def.ns",
+        "dataRadioSelected": false
+      },
+      "measured": {
+        "width": 463,
+        "height": 253
+      },
+      "selected": false
+    },
+    {
+      "id": "qosflow-1763321270412-5117",
+      "type": "customNode",
+      "position": {
+        "x": -2511.447831355178,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-1",
+        "nodeId": "qosflow-1763321270412-5117",
+        "qosFlowId": 1,
+        "qosFlowName": "QoS Flow 1",
+        "nodeNumber": 5117,
+        "isDefault": true
+      },
+      "measured": {
+        "width": 271,
+        "height": 291
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "qosflow-1763321273706-4718",
+      "type": "customNode",
+      "position": {
+        "x": -2061.447831355178,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-6",
+        "nodeId": "qosflow-1763321273706-4718",
+        "qosFlowId": 2,
+        "qosFlowName": "QoS Flow 2",
+        "nodeNumber": 4718,
+        "isDefault": false
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      },
+      "selected": false
+    },
+    {
+      "id": "fiveqi-1",
+      "type": "customNode",
+      "position": {
+        "x": -2501.447831355178,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321270412-5117",
+        "nodeId": "fiveqi-1",
+        "fiveQIId": "6"
+      },
+      "measured": {
+        "width": 455,
+        "height": 306
+      }
+    },
+    {
+      "id": "fiveqi-2",
+      "type": "customNode",
+      "position": {
+        "x": -2051.447831355178,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321273706-4718",
+        "nodeId": "fiveqi-2",
+        "fiveQIId": "7"
+      },
+      "measured": {
+        "width": 471,
+        "height": 306
+      }
+    },
+    {
+      "id": "qosflow-1763321414280-6316",
+      "type": "customNode",
+      "position": {
+        "x": -1611.447831355178,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-6",
+        "nodeId": "qosflow-1763321414280-6316",
+        "qosFlowId": 3,
+        "qosFlowName": "QoS Flow 3",
+        "nodeNumber": 6316,
+        "isDefault": true
+      },
+      "measured": {
+        "width": 271,
+        "height": 291
+      },
+      "selected": false
+    },
+    {
+      "id": "fiveqi-3",
+      "type": "customNode",
+      "position": {
+        "x": -1601.447831355178,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321414280-6316",
+        "nodeId": "fiveqi-3",
+        "fiveQIId": "9"
+      },
+      "measured": {
+        "width": 455,
+        "height": 306
+      }
+    },
+    {
+      "id": "qosflow-1763321437597-8720",
+      "type": "customNode",
+      "position": {
+        "x": -1161.447831355178,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-6",
+        "nodeId": "qosflow-1763321437597-8720",
+        "qosFlowId": 4,
+        "qosFlowName": "QoS Flow 4"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "fiveqi-4",
+      "type": "customNode",
+      "position": {
+        "x": -1151.447831355178,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321437597-8720",
+        "nodeId": "fiveqi-4",
+        "fiveQIId": "79"
+      },
+      "measured": {
+        "width": 221,
+        "height": 306
+      }
+    },
+    {
+      "id": "qosflow-1763321637752-42",
+      "type": "customNode",
+      "position": {
+        "x": -196.4478313551781,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-3",
+        "nodeId": "qosflow-1763321637752-42",
+        "qosFlowId": 5,
+        "qosFlowName": "QoS Flow 5"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "qosflow-1763321640644-4418",
+      "type": "customNode",
+      "position": {
+        "x": 253.5521686448219,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-3",
+        "nodeId": "qosflow-1763321640644-4418",
+        "qosFlowId": 6,
+        "qosFlowName": "QoS Flow 6"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "qosflow-1763321643148-2052",
+      "type": "customNode",
+      "position": {
+        "x": 703.5521686448219,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-3",
+        "nodeId": "qosflow-1763321643148-2052",
+        "qosFlowId": 7,
+        "qosFlowName": "QoS Flow 7"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "fiveqi-5",
+      "type": "customNode",
+      "position": {
+        "x": -186.4478313551781,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321637752-42",
+        "nodeId": "fiveqi-5",
+        "fiveQIId": "7"
+      },
+      "measured": {
+        "width": 471,
+        "height": 306
+      }
+    },
+    {
+      "id": "fiveqi-6",
+      "type": "customNode",
+      "position": {
+        "x": 263.5521686448219,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321640644-4418",
+        "nodeId": "fiveqi-6",
+        "fiveQIId": "9"
+      },
+      "measured": {
+        "width": 455,
+        "height": 306
+      }
+    },
+    {
+      "id": "fiveqi-7",
+      "type": "customNode",
+      "position": {
+        "x": 713.5521686448219,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321643148-2052",
+        "nodeId": "fiveqi-7",
+        "fiveQIId": "79"
+      },
+      "measured": {
+        "width": 221,
+        "height": 306
+      }
+    },
+    {
+      "id": "qosflow-1763321705593-3207",
+      "type": "customNode",
+      "position": {
+        "x": 1153.552168644822,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-4",
+        "nodeId": "qosflow-1763321705593-3207",
+        "qosFlowId": 9,
+        "qosFlowName": "QoS Flow 9"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "fiveqi-8",
+      "type": "customNode",
+      "position": {
+        "x": 1163.552168644822,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321705593-3207",
+        "nodeId": "fiveqi-8",
+        "fiveQIId": "9"
+      },
+      "measured": {
+        "width": 455,
+        "height": 306
+      }
+    },
+    {
+      "id": "qosflow-1763321724582-6205",
+      "type": "customNode",
+      "position": {
+        "x": 1827.552168644822,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-5",
+        "nodeId": "qosflow-1763321724582-6205",
+        "qosFlowId": 10,
+        "qosFlowName": "QoS Flow 10"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "qosflow-1763321726741-1803",
+      "type": "customNode",
+      "position": {
+        "x": 2277.552168644822,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-5",
+        "nodeId": "qosflow-1763321726741-1803",
+        "qosFlowId": 11,
+        "qosFlowName": "QoS Flow 11"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "qosflow-1763321729238-1833",
+      "type": "customNode",
+      "position": {
+        "x": 2727.552168644822,
+        "y": 3437.653135252318
+      },
+      "data": {
+        "type": "qosflow",
+        "label": "QOSFLOW Node",
+        "parentId": "dnn-5",
+        "nodeId": "qosflow-1763321729238-1833",
+        "qosFlowId": 12,
+        "qosFlowName": "QoS Flow 12"
+      },
+      "measured": {
+        "width": 255,
+        "height": 275
+      }
+    },
+    {
+      "id": "fiveqi-9",
+      "type": "customNode",
+      "position": {
+        "x": 1837.552168644822,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321724582-6205",
+        "nodeId": "fiveqi-9",
+        "fiveQIId": "7"
+      },
+      "measured": {
+        "width": 471,
+        "height": 306
+      }
+    },
+    {
+      "id": "fiveqi-10",
+      "type": "customNode",
+      "position": {
+        "x": 2287.552168644822,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321726741-1803",
+        "nodeId": "fiveqi-10",
+        "fiveQIId": "9"
+      },
+      "measured": {
+        "width": 455,
+        "height": 306
+      }
+    },
+    {
+      "id": "fiveqi-11",
+      "type": "customNode",
+      "position": {
+        "x": 2737.552168644822,
+        "y": 3867.653135252318
+      },
+      "data": {
+        "type": "fiveqi",
+        "label": "FIVEQI Node",
+        "parentId": "qosflow-1763321729238-1833",
+        "nodeId": "fiveqi-11",
+        "fiveQIId": "79"
+      },
+      "measured": {
+        "width": 221,
+        "height": 306
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "unified-rrp-1-rrpmember-1",
+      "source": "rrp-1",
+      "target": "rrpmember-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-1-rrpmember-2",
+      "source": "rrp-1",
+      "target": "rrpmember-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-2-rrpmember-3",
+      "source": "rrp-2",
+      "target": "rrpmember-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-2-rrpmember-4",
+      "source": "rrp-2",
+      "target": "rrpmember-4",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-3-rrpmember-5",
+      "source": "rrp-3",
+      "target": "rrpmember-5",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-3-rrpmember-6",
+      "source": "rrp-3",
+      "target": "rrpmember-6",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-northstar-1-network-1",
+      "source": "northstar-1",
+      "target": "network-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-network-1-cell-area-1",
+      "source": "network-1",
+      "target": "cell-area-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-network-1-cell-area-2",
+      "source": "network-1",
+      "target": "cell-area-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrpmember-2-s-nssai-1",
+      "source": "rrpmember-2",
+      "target": "s-nssai-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      },
+      "selected": false
+    },
+    {
+      "id": "unified-rrpmember-4-s-nssai-3",
+      "source": "rrpmember-4",
+      "target": "s-nssai-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrpmember-6-s-nssai-4",
+      "source": "rrpmember-6",
+      "target": "s-nssai-4",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-cell-area-1-rrp-1",
+      "source": "cell-area-1",
+      "target": "rrp-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-cell-area-1-rrp-2",
+      "source": "cell-area-1",
+      "target": "rrp-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-cell-area-1-rrp-3",
+      "source": "cell-area-1",
+      "target": "rrp-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-s-nssai-1-dnn-1",
+      "source": "s-nssai-1",
+      "target": "dnn-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-s-nssai-3-dnn-3",
+      "source": "s-nssai-3",
+      "target": "dnn-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-s-nssai-4-dnn-4",
+      "source": "s-nssai-4",
+      "target": "dnn-4",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-4-rrpmember-7",
+      "source": "rrp-4",
+      "target": "rrpmember-7",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-4-rrpmember-8",
+      "source": "rrp-4",
+      "target": "rrpmember-8",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-5-rrpmember-9",
+      "source": "rrp-5",
+      "target": "rrpmember-9",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-5-rrpmember-10",
+      "source": "rrp-5",
+      "target": "rrpmember-10",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-cell-area-2-rrp-4",
+      "source": "cell-area-2",
+      "target": "rrp-4",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-cell-area-2-rrp-5",
+      "source": "cell-area-2",
+      "target": "rrp-5",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrpmember-8-s-nssai-3",
+      "source": "rrpmember-8",
+      "target": "s-nssai-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "manual"
+      }
+    },
+    {
+      "id": "unified-rrpmember-10-s-nssai-4",
+      "source": "rrpmember-10",
+      "target": "s-nssai-4",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "manual"
+      }
+    },
+    {
+      "id": "unified-network-1-cell-area-3",
+      "source": "network-1",
+      "target": "cell-area-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-cell-area-3-rrp-6",
+      "source": "cell-area-3",
+      "target": "rrp-6",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrp-6-rrpmember-11",
+      "source": "rrp-6",
+      "target": "rrpmember-11",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-rrpmember-11-s-nssai-5",
+      "source": "rrpmember-11",
+      "target": "s-nssai-5",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-s-nssai-5-dnn-5",
+      "source": "s-nssai-5",
+      "target": "dnn-5",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-s-nssai-1-dnn-6",
+      "source": "s-nssai-1",
+      "target": "dnn-6",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-1-qosflow-1763321270412-5117",
+      "source": "dnn-1",
+      "target": "qosflow-1763321270412-5117",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-6-qosflow-1763321273706-4718",
+      "source": "dnn-6",
+      "target": "qosflow-1763321273706-4718",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321270412-5117-fiveqi-1",
+      "source": "qosflow-1763321270412-5117",
+      "target": "fiveqi-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321273706-4718-fiveqi-2",
+      "source": "qosflow-1763321273706-4718",
+      "target": "fiveqi-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-6-qosflow-1763321414280-6316",
+      "source": "dnn-6",
+      "target": "qosflow-1763321414280-6316",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321414280-6316-fiveqi-3",
+      "source": "qosflow-1763321414280-6316",
+      "target": "fiveqi-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-6-qosflow-1763321437597-8720",
+      "source": "dnn-6",
+      "target": "qosflow-1763321437597-8720",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321437597-8720-fiveqi-4",
+      "source": "qosflow-1763321437597-8720",
+      "target": "fiveqi-4",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-3-qosflow-1763321637752-42",
+      "source": "dnn-3",
+      "target": "qosflow-1763321637752-42",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-3-qosflow-1763321640644-4418",
+      "source": "dnn-3",
+      "target": "qosflow-1763321640644-4418",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-3-qosflow-1763321643148-2052",
+      "source": "dnn-3",
+      "target": "qosflow-1763321643148-2052",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321637752-42-fiveqi-5",
+      "source": "qosflow-1763321637752-42",
+      "target": "fiveqi-5",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321640644-4418-fiveqi-6",
+      "source": "qosflow-1763321640644-4418",
+      "target": "fiveqi-6",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321643148-2052-fiveqi-7",
+      "source": "qosflow-1763321643148-2052",
+      "target": "fiveqi-7",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-4-qosflow-1763321705593-3207",
+      "source": "dnn-4",
+      "target": "qosflow-1763321705593-3207",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321705593-3207-fiveqi-8",
+      "source": "qosflow-1763321705593-3207",
+      "target": "fiveqi-8",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-5-qosflow-1763321724582-6205",
+      "source": "dnn-5",
+      "target": "qosflow-1763321724582-6205",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-5-qosflow-1763321726741-1803",
+      "source": "dnn-5",
+      "target": "qosflow-1763321726741-1803",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-dnn-5-qosflow-1763321729238-1833",
+      "source": "dnn-5",
+      "target": "qosflow-1763321729238-1833",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321724582-6205-fiveqi-9",
+      "source": "qosflow-1763321724582-6205",
+      "target": "fiveqi-9",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321726741-1803-fiveqi-10",
+      "source": "qosflow-1763321726741-1803",
+      "target": "fiveqi-10",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    },
+    {
+      "id": "unified-qosflow-1763321729238-1833-fiveqi-11",
+      "source": "qosflow-1763321729238-1833",
+      "target": "fiveqi-11",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#2563eb",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#2563eb",
+        "width": 12,
+        "height": 12
+      },
+      "data": {
+        "createdBy": "auto"
+      }
+    }
+  ],
+  "exportTime": 1763321813786,
+  "exportMethod": "DIRECT_REACTFLOW_ACCESS"
+}

@@ -54,40 +54,40 @@ const SnssaiNode = memo(({ data }: SnssaiNodeProps) => {
         type="target"
         position={Position.Top}
         id="top-target"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ top: -8 }}
         isConnectable={true}
       />
       
       {/* Header */}
-      <div className="w-full bg-violet-100 border-b border-violet-200 px-2 py-1 mb-2 rounded-t">
-        <div className="text-sm font-semibold text-violet-800 text-center">S-NSSAI#{displayId}</div>
+      <div className="w-full bg-violet-300 border-b border-violet-400 px-4 py-3 mb-4 rounded-t">
+        <div className="text-lg font-bold text-white text-center">S-NSSAI#{displayId}</div>
       </div>
       
       {data.description && (
-        <div className="text-xs text-gray-600 mt-1 text-center">{data.description}</div>
+        <div className="text-base text-gray-900 mt-3 text-center">{data.description}</div>
       )}
       
-      <div className="mt-2 mb-1 w-full space-y-2">
+      <div className="mt-4 mb-3 w-full space-y-2">
         <div className="flex flex-col">
-          <label className="text-xs text-gray-700 mb-1">SD:</label>
+          <label className="text-base text-gray-900 mb-3 font-semibold">SD:</label>
           <input
             type="text"
             value={sd}
             onChange={handleSdChange}
             placeholder="Service Differentiator"
-            className="text-xs p-1 w-full border border-gray-300 rounded"
+            className="text-base p-1 w-full border border-gray-300 rounded"
           />
         </div>
         
         <div className="flex flex-col">
-          <label className="text-xs text-gray-700 mb-1">SST:</label>
+          <label className="text-base text-gray-900 mb-3 font-semibold">SST:</label>
           <input
             type="text"
             value={sst}
             onChange={handleSstChange}
             placeholder="Slice/Service Type"
-            className="text-xs p-1 w-full border border-gray-300 rounded"
+            className="text-base p-1 w-full border border-gray-300 rounded"
           />
         </div>
       </div>
@@ -97,7 +97,7 @@ const SnssaiNode = memo(({ data }: SnssaiNodeProps) => {
         type="source"
         position={Position.Bottom}
         id="bottom-source"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ bottom: -8 }}
         isConnectable={true}
       />

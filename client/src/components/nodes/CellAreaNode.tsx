@@ -86,7 +86,7 @@ const CellAreaNode = memo(({ data }: CellAreaNodeProps) => {
         type="target"
         position={Position.Top}
         id="top-target"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ top: -8 }}
         isConnectable={true}
       />
@@ -96,7 +96,7 @@ const CellAreaNode = memo(({ data }: CellAreaNodeProps) => {
         type="source"
         position={Position.Bottom}
         id="bottom-source"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ bottom: -8 }}
         isConnectable={true}
       />
@@ -104,8 +104,8 @@ const CellAreaNode = memo(({ data }: CellAreaNodeProps) => {
       <div className="cell-area-content">
 
       {/* Header - Shows "Cell Area #" with the cellAreaId */}
-      <div className="w-full bg-blue-100 border-b border-blue-200 px-2 py-1 mb-2 rounded-t">
-        <div className="text-sm font-semibold text-blue-800 text-center">Cell Area #{displayId}</div>
+      <div className="w-full bg-blue-300 border-b border-blue-400 px-4 py-3 mb-4 rounded-t">
+        <div className="text-lg font-bold text-white text-center">Cell Area #{displayId}</div>
       </div>
 
       {isEditingDescription ? (
@@ -115,12 +115,12 @@ const CellAreaNode = memo(({ data }: CellAreaNodeProps) => {
           onChange={handleDescriptionChange}
           onBlur={handleDescriptionBlur}
           placeholder="Add description..."
-          className="text-xs p-1 w-full border border-gray-300 rounded bg-white"
+          className="text-base p-1 w-full border border-gray-300 rounded bg-white"
           autoFocus
         />
       ) : (
         <div 
-          className="text-xs text-center cursor-pointer hover:bg-blue-100 p-1 rounded cell-area-description"
+          className="text-base text-center cursor-pointer hover:bg-blue-100 p-1 rounded cell-area-description"
           onClick={handleDescriptionClick}
         >
           {cellDescription}

@@ -1,0 +1,533 @@
+{
+  "nodes": [
+    {
+      "id": "network-test-1",
+      "type": "customNode",
+      "position": { "x": 400, "y": 50 },
+      "data": {
+        "type": "network",
+        "label": "NETWORK Node",
+        "nodeId": "network-test-1"
+      }
+    },
+    {
+      "id": "cell-area-test-1",
+      "type": "customNode",
+      "position": { "x": 100, "y": 300 },
+      "data": {
+        "type": "cell-area",
+        "label": "CELL-AREA Node",
+        "parentId": "network-test-1",
+        "nodeId": "cell-area-test-1",
+        "cellAreaId": 1,
+        "cellAreaDescription": "Test Area with Very Long Description Text to Test Wrapping",
+        "nodeNumber": 1,
+        "notes": "This is a comprehensive test node with maximum content length to verify text wrapping, sizing, and readability improvements"
+      }
+    },
+    {
+      "id": "cell-area-test-2",
+      "type": "customNode",
+      "position": { "x": 700, "y": 300 },
+      "data": {
+        "type": "cell-area",
+        "label": "CELL-AREA Node",
+        "parentId": "network-test-1",
+        "nodeId": "cell-area-test-2",
+        "cellAreaId": 2,
+        "cellAreaDescription": "Secondary Test Area",
+        "nodeNumber": 2,
+        "notes": "Short note"
+      }
+    },
+    {
+      "id": "rrp-test-1",
+      "type": "customNode",
+      "position": { "x": 50, "y": 650 },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-test-1",
+        "nodeId": "rrp-test-1",
+        "rrpId": 1,
+        "extraData": { "rrpPercentage": 100 },
+        "nodeNumber": 1,
+        "rrpName": "Premium Resource Profile with Extended Name",
+        "rrpBands": [
+          { "name": "3500", "dl": 50, "ul": 50 },
+          { "name": "1800", "dl": 50, "ul": 50 },
+          { "name": "700", "dl": 40, "ul": 40 }
+        ]
+      }
+    },
+    {
+      "id": "rrp-test-2",
+      "type": "customNode",
+      "position": { "x": 650, "y": 650 },
+      "data": {
+        "type": "rrp",
+        "label": "RRP Node",
+        "parentId": "cell-area-test-2",
+        "nodeId": "rrp-test-2",
+        "rrpId": 2,
+        "extraData": { "rrpPercentage": 100 },
+        "nodeNumber": 2,
+        "rrpName": "Basic",
+        "rrpBands": [
+          { "name": "3500", "dl": 10, "ul": 10 }
+        ]
+      }
+    },
+    {
+      "id": "rrpmember-test-1",
+      "type": "customNode",
+      "position": { "x": 50, "y": 1100 },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-test-1",
+        "nodeId": "rrpmember-test-1",
+        "plmnValue": "240 01"
+      }
+    },
+    {
+      "id": "rrpmember-test-2",
+      "type": "customNode",
+      "position": { "x": 250, "y": 1100 },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-test-1",
+        "nodeId": "rrpmember-test-2",
+        "plmnValue": "240 49"
+      }
+    },
+    {
+      "id": "rrpmember-test-3",
+      "type": "customNode",
+      "position": { "x": 650, "y": 1100 },
+      "data": {
+        "type": "rrpmember",
+        "label": "RRPMEMBER Node",
+        "parentId": "rrp-test-2",
+        "nodeId": "rrpmember-test-3",
+        "plmnValue": "240 01"
+      }
+    },
+    {
+      "id": "s-nssai-test-1",
+      "type": "customNode",
+      "position": { "x": 0, "y": 1400 },
+      "data": {
+        "type": "s-nssai",
+        "label": "S-NSSAI Node",
+        "parentId": "rrpmember-test-1",
+        "nodeId": "s-nssai-test-1",
+        "snssaiId": 1,
+        "nodeNumber": 1,
+        "sd": "1234567890",
+        "sst": "1"
+      }
+    },
+    {
+      "id": "s-nssai-test-2",
+      "type": "customNode",
+      "position": { "x": 250, "y": 1400 },
+      "data": {
+        "type": "s-nssai",
+        "label": "S-NSSAI Node",
+        "parentId": "rrpmember-test-2",
+        "nodeId": "s-nssai-test-2",
+        "snssaiId": 2,
+        "nodeNumber": 2,
+        "sd": "56",
+        "sst": "2"
+      }
+    },
+    {
+      "id": "s-nssai-test-3",
+      "type": "customNode",
+      "position": { "x": 650, "y": 1400 },
+      "data": {
+        "type": "s-nssai",
+        "label": "S-NSSAI Node",
+        "parentId": "rrpmember-test-3",
+        "nodeId": "s-nssai-test-3",
+        "snssaiId": 3,
+        "nodeNumber": 3,
+        "sd": "empty",
+        "sst": "1"
+      }
+    },
+    {
+      "id": "dnn-test-1",
+      "type": "customNode",
+      "position": { "x": -50, "y": 1750 },
+      "data": {
+        "type": "dnn",
+        "label": "DNN Node",
+        "parentId": "s-nssai-test-1",
+        "nodeId": "dnn-test-1",
+        "dnnId": 1,
+        "nodeNumber": 1,
+        "dnnCustomName": "internet-premium-service-with-very-long-name"
+      }
+    },
+    {
+      "id": "dnn-test-2",
+      "type": "customNode",
+      "position": { "x": 250, "y": 1750 },
+      "data": {
+        "type": "dnn",
+        "label": "DNN Node",
+        "parentId": "s-nssai-test-2",
+        "nodeId": "dnn-test-2",
+        "dnnId": 2,
+        "nodeNumber": 2,
+        "dnnCustomName": "ims"
+      }
+    },
+    {
+      "id": "dnn-test-3",
+      "type": "customNode",
+      "position": { "x": 650, "y": 1750 },
+      "data": {
+        "type": "dnn",
+        "label": "DNN Node",
+        "parentId": "s-nssai-test-3",
+        "nodeId": "dnn-test-3",
+        "dnnId": 3,
+        "nodeNumber": 3,
+        "dnnCustomName": "internet"
+      }
+    },
+    {
+      "id": "fiveqi-test-1",
+      "type": "customNode",
+      "position": { "x": -100, "y": 2100 },
+      "data": {
+        "type": "fiveqi",
+        "label": "5QI Node",
+        "parentId": "dnn-test-1",
+        "nodeId": "fiveqi-test-1",
+        "fiveQIId": 1,
+        "nodeNumber": 1,
+        "qosValues": {
+          "fiveQI": 1,
+          "resourceType": "GBR",
+          "priorityLevel": 20,
+          "packetDelayBudget": 100,
+          "packetErrorRate": "1E-2",
+          "defaultMaxDataBurstVolume": 0,
+          "defaultAveragingWindow": 2000,
+          "serviceDescription": "Conversational Voice - Very Long Service Description to Test Text Wrapping and Sizing"
+        }
+      }
+    },
+    {
+      "id": "fiveqi-test-2",
+      "type": "customNode",
+      "position": { "x": 200, "y": 2100 },
+      "data": {
+        "type": "fiveqi",
+        "label": "5QI Node",
+        "parentId": "dnn-test-2",
+        "nodeId": "fiveqi-test-2",
+        "fiveQIId": 5,
+        "nodeNumber": 2,
+        "qosValues": {
+          "fiveQI": 5,
+          "resourceType": "Non-GBR",
+          "priorityLevel": 10,
+          "packetDelayBudget": 100,
+          "packetErrorRate": "1E-6",
+          "defaultMaxDataBurstVolume": 0,
+          "defaultAveragingWindow": 2000,
+          "serviceDescription": "IMS Signalling"
+        }
+      }
+    },
+    {
+      "id": "fiveqi-test-3",
+      "type": "customNode",
+      "position": { "x": 600, "y": 2100 },
+      "data": {
+        "type": "fiveqi",
+        "label": "5QI Node",
+        "parentId": "dnn-test-3",
+        "nodeId": "fiveqi-test-3",
+        "fiveQIId": 9,
+        "nodeNumber": 3,
+        "qosValues": {
+          "fiveQI": 9,
+          "resourceType": "Non-GBR",
+          "priorityLevel": 90,
+          "packetDelayBudget": 300,
+          "packetErrorRate": "1E-6",
+          "defaultMaxDataBurstVolume": 0,
+          "defaultAveragingWindow": 2000,
+          "serviceDescription": "Video (Buffered Streaming) TCP-based (e.g., www, e-mail, chat, ftp, p2p file sharing, progressive video, etc.)"
+        }
+      }
+    },
+    {
+      "id": "qosflow-test-1",
+      "type": "customNode",
+      "position": { "x": -100, "y": 2500 },
+      "data": {
+        "type": "qosflow",
+        "label": "QoS Flow Node",
+        "parentId": "fiveqi-test-1",
+        "nodeId": "qosflow-test-1",
+        "qosFlowId": 1,
+        "nodeNumber": 1,
+        "qfi": 1,
+        "gfbr": "100 Mbps",
+        "mfbr": "150 Mbps"
+      }
+    },
+    {
+      "id": "qosflow-test-2",
+      "type": "customNode",
+      "position": { "x": 200, "y": 2500 },
+      "data": {
+        "type": "qosflow",
+        "label": "QoS Flow Node",
+        "parentId": "fiveqi-test-2",
+        "nodeId": "qosflow-test-2",
+        "qosFlowId": 2,
+        "nodeNumber": 2,
+        "qfi": 5,
+        "gfbr": "50 Mbps",
+        "mfbr": "75 Mbps"
+      }
+    },
+    {
+      "id": "qosflow-test-3",
+      "type": "customNode",
+      "position": { "x": 600, "y": 2500 },
+      "data": {
+        "type": "qosflow",
+        "label": "QoS Flow Node",
+        "parentId": "fiveqi-test-3",
+        "nodeId": "qosflow-test-3",
+        "qosFlowId": 3,
+        "nodeNumber": 3,
+        "qfi": 9,
+        "gfbr": "10 Mbps",
+        "mfbr": "20 Mbps"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-network-cell1",
+      "source": "network-test-1",
+      "target": "cell-area-test-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-network-cell2",
+      "source": "network-test-1",
+      "target": "cell-area-test-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-cell1-rrp1",
+      "source": "cell-area-test-1",
+      "target": "rrp-test-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-cell2-rrp2",
+      "source": "cell-area-test-2",
+      "target": "rrp-test-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-rrp1-member1",
+      "source": "rrp-test-1",
+      "target": "rrpmember-test-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-rrp1-member2",
+      "source": "rrp-test-1",
+      "target": "rrpmember-test-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-rrp2-member3",
+      "source": "rrp-test-2",
+      "target": "rrpmember-test-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-member1-snssai1",
+      "source": "rrpmember-test-1",
+      "target": "s-nssai-test-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-member2-snssai2",
+      "source": "rrpmember-test-2",
+      "target": "s-nssai-test-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-member3-snssai3",
+      "source": "rrpmember-test-3",
+      "target": "s-nssai-test-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-snssai1-dnn1",
+      "source": "s-nssai-test-1",
+      "target": "dnn-test-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-snssai2-dnn2",
+      "source": "s-nssai-test-2",
+      "target": "dnn-test-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-snssai3-dnn3",
+      "source": "s-nssai-test-3",
+      "target": "dnn-test-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-dnn1-fiveqi1",
+      "source": "dnn-test-1",
+      "target": "fiveqi-test-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-dnn2-fiveqi2",
+      "source": "dnn-test-2",
+      "target": "fiveqi-test-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-dnn3-fiveqi3",
+      "source": "dnn-test-3",
+      "target": "fiveqi-test-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-fiveqi1-qosflow1",
+      "source": "fiveqi-test-1",
+      "target": "qosflow-test-1",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-fiveqi2-qosflow2",
+      "source": "fiveqi-test-2",
+      "target": "qosflow-test-2",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    },
+    {
+      "id": "edge-fiveqi3-qosflow3",
+      "source": "fiveqi-test-3",
+      "target": "qosflow-test-3",
+      "sourceHandle": "bottom-source",
+      "targetHandle": "top-target",
+      "type": "default",
+      "animated": false,
+      "style": { "stroke": "#2563eb", "strokeWidth": 3, "opacity": 1 },
+      "markerEnd": { "type": "arrowclosed", "color": "#2563eb", "width": 12, "height": 12 }
+    }
+  ]
+}

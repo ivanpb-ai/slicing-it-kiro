@@ -39,7 +39,7 @@ const NetworkNode = memo(({ data }: NetworkNodeProps) => {
         type="source"
         position={Position.Bottom}
         id="bottom-source"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ bottom: -8 }}
         isConnectable={true}
       />
@@ -53,15 +53,15 @@ const NetworkNode = memo(({ data }: NetworkNodeProps) => {
 >
 
       {/* Header */}
-      <div className="w-full bg-indigo-100 border-b border-indigo-200 px-2 py-1 mb-2 rounded-t">
-        <div className="text-sm font-semibold text-indigo-800 text-center">Network</div>
+      <div className="w-full bg-indigo-300 border-b border-indigo-400 px-4 py-3 mb-4 rounded-t">
+        <div className="text-lg font-bold text-white text-center">Network</div>
       </div>
       
       {data.description && (
-        <div className="text-xs text-gray-600 mt-1 text-center">{data.description}</div>
+        <div className="text-base text-gray-900 mt-3 text-center">{data.description}</div>
       )}
       
-      <div className="text-center text-xs mt-2 text-blue-600">Main entry point</div>
+      <div className="text-center text-base mt-4 text-blue-600">Main entry point</div>
     </div>
   </div>
 

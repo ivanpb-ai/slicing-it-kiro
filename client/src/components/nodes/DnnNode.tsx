@@ -69,20 +69,20 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
         type="target"
         position={Position.Top}
         id="top-target"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ top: -8 }}
         isConnectable={true}
       />
       
       {/* Header */}
-      <div className="w-full bg-orange-100 border-b border-orange-200 px-2 py-1 mb-2 rounded-t">
-        <div className="text-sm font-semibold text-orange-800 text-center">DNN#{displayId}</div>
+      <div className="w-full bg-orange-300 border-b border-orange-400 px-4 py-3 mb-4 rounded-t">
+        <div className="text-lg font-bold text-white text-center">DNN#{displayId}</div>
       </div>
       
       {data.description && (
-        <div className="text-xs text-gray-600 mt-1 text-center">{data.description}</div>
+        <div className="text-base text-gray-900 mt-3 text-center">{data.description}</div>
       )}
-      <div className="mt-2 mb-1 w-full">
+      <div className="mt-4 mb-3 w-full">
         {isEditing ? (
           <input
             type="text"
@@ -90,22 +90,22 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
             onChange={handleCustomNameChange}
             onBlur={handleBlur}
             placeholder="Add custom name..."
-            className="text-xs p-1 w-full border border-gray-300 rounded"
+            className="text-base p-1 w-full border border-gray-300 rounded"
             autoFocus
           />
         ) : (
           <div 
-            className="text-xs text-center cursor-pointer hover:bg-gray-100/50 p-1 rounded"
+            className="text-base text-gray-900 text-center cursor-pointer hover:bg-gray-100/50 p-1 rounded"
             onClick={handleClick}
           >
             {customName ? customName : "Click to add custom name..."}
           </div>
         )}
       </div>
-      <div className="text-xs text-center text-blue-600 mt-1">
+      <div className="text-base text-center text-gray-800 mt-3">
         Connect top handle to multiple S-NSSAI bottom handles
       </div>
-      <div className="text-xs text-center text-green-600 mt-1 font-semibold">
+      <div className="text-base text-center text-gray-800 mt-3 font-semibold">
         Drag QoS Flow nodes onto this DNN to connect them
       </div>
 
@@ -115,7 +115,7 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
         type="source"
         position={Position.Bottom}
         id="bottom-source"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ bottom: -8 }}
         isConnectable={true}
       />

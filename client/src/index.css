@@ -78,10 +78,20 @@ body {
 .react-flow__node.selected {
   @apply shadow-md ring-2 ring-gray-400/50;
 }
+
+/* Selected state - maximum prominence with enhanced shadow and ring */
+.react-flow__node.selected .node-wrapper {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25), 
+              0 6px 12px rgba(0, 0, 0, 0.2);
+  ring: 4px solid rgba(59, 130, 246, 0.6);
+  border-width: 4px !important;
+}
 /* ... keep all other React Flow and utility styles ... */
 
 .react-flow__handle {
-  @apply w-3 h-3 rounded-full border-2 border-white bg-gray-400 transition-all duration-300 opacity-100;
+  @apply w-4 h-4 rounded-full border-white bg-gray-400 transition-all duration-300 opacity-100;
+  border-width: 3px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 100;
 }
 
@@ -103,6 +113,9 @@ body {
 
 .react-flow__handle:hover {
   @apply bg-gray-700;
+  width: 20px !important;
+  height: 20px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .react-flow__edge-path {
@@ -284,6 +297,28 @@ div[data-node-type="fiveqi"] {
   min-width: 150px;
   min-height: 80px;
   pointer-events: all !important;
+  /* Multi-layered shadow system for depth */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 
+              0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-out;
+  position: relative;
+}
+
+/* Subtle gradient overlay for enhanced depth perception */
+.node-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Hover state - dramatic lift */
+.node-wrapper:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 
+              0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 /* Force elements to be visible regardless of style */

@@ -10,10 +10,10 @@ interface RrpMemberNodeProps {
 
 const RrpMemberNode = memo(({ data }: RrpMemberNodeProps) => {
   return (
-    <div className="text-xs text-gray-600 text-center">
+    <div className="text-base text-gray-900 text-center">
       {/* Header */}
-      <div className="w-full bg-teal-100 border-b border-teal-200 px-2 py-1 mb-2 rounded-t">
-        <div className="text-sm font-semibold text-teal-800 text-center">RRP Member</div>
+      <div className="w-full bg-teal-300 border-b border-teal-400 px-4 py-3 mb-4 rounded-t">
+        <div className="text-lg font-bold text-white text-center">RRP Member</div>
       </div>
     
       {/* Input handle at the top */}
@@ -21,11 +21,11 @@ const RrpMemberNode = memo(({ data }: RrpMemberNodeProps) => {
         type="target"
         position={Position.Top}
         id="top-target"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ top: -8 }}
         isConnectable={true}
       />
-      <div className="text-sm font-semibold">
+      <div className="text-base font-semibold text-gray-900">
         PLMN: {data.plmnValue || 'Unknown'}
       </div>
       {/* Output handle at the bottom */}
@@ -33,7 +33,7 @@ const RrpMemberNode = memo(({ data }: RrpMemberNodeProps) => {
         type="source"
         position={Position.Bottom}
         id="bottom-source"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ bottom: -8 }}
         isConnectable={true}
       />

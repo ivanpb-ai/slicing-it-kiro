@@ -76,16 +76,16 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   // If we still don't have values, show error state
   if (!displayValues) {
     return (
-      <div className="text-xs text-gray-600 mt-1 text-center">
+      <div className="text-base text-gray-900 mt-1 text-center">
         {/* Header */}
-        <div className="w-full bg-purple-100 border-b border-purple-200 px-2 py-1 mb-2 rounded-t">
-          <div className="text-sm font-semibold text-purple-800 text-center">5QI</div>
+        <div className="w-full bg-purple-300 border-b border-purple-400 px-4 py-3 mb-4 rounded-t">
+          <div className="text-lg font-bold text-white text-center">5QI</div>
         </div>
         
-        <Badge className="bg-red-500 text-white hover:bg-red-600 mb-2 px-5 py-2 text-sm font-semibold rounded-full">
+        <Badge className="bg-red-600 text-white hover:bg-red-700 mb-4 px-5 py-2 text-xl font-bold rounded-full">
           Invalid 5QI: {fiveQIId || "Unknown"}
         </Badge>
-        <div className="mt-2 text-sm font-medium text-red-800">
+        <div className="mt-4 text-base font-semibold text-gray-900">
           Could not load QoS values
         </div>
       </div>
@@ -103,40 +103,40 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         type="target"
         position={Position.Top}
         id="top-target"
-        className="!w-4 !h-4 !border-2 !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
+        className="!w-4 !h-4 !border-[3px] !rounded-full !border-white !bg-blue-500 !opacity-100 !z-50"
         style={{ top: -8 }}
         isConnectable={true}
       />
 
-      <div className="text-xs text-gray-600 mt-1 text-center">
+      <div className="text-base text-gray-900 mt-3 text-center">
 
       {/* Header */}
-      <div className="w-full bg-purple-100 border-b border-purple-200 px-2 py-1 mb-2 rounded-t">
-        <div className="text-sm font-semibold text-purple-800 text-center">5QI</div>
+      <div className="w-full bg-purple-300 border-b border-purple-400 px-4 py-3 mb-4 rounded-t">
+        <div className="text-lg font-bold text-white text-center">5QI</div>
       </div>
 
 
       {/* Display prominent badge with 5QI value */}
-      <Badge className="bg-purple-500 text-white hover:bg-purple-600 mb-2 px-5 py-2 text-sm font-semibold rounded-full">
+      <Badge className="bg-purple-500 text-white hover:bg-purple-600 mb-4 px-5 py-2 text-xl font-bold rounded-full">
         5QI: {fiveQIId || displayValues.value}
       </Badge>
       
       {/* Display QoS service/description */}
-      <div className="mt-2 text-sm font-medium text-purple-800">
+      <div className="mt-4 text-base font-semibold text-gray-900">
         {displayValues.service}
       </div>
       
       {/* Display QoS parameters in a more visible format */}
-      <div className="mt-2 text-xs bg-white/70 p-3 rounded shadow-sm">
+      <div className="mt-4 text-base bg-white/70 p-3 rounded shadow-sm">
         <div className="grid grid-cols-2 gap-x-2 gap-y-1.5">
-          <span className="font-semibold text-purple-800">Type:</span>
-          <span className="text-gray-800">{displayValues.resourceType}</span>
+          <span className="font-semibold text-gray-900">Type:</span>
+          <span className="text-gray-900">{displayValues.resourceType}</span>
           
-          <span className="font-semibold text-purple-800">Priority:</span>
-          <span className="text-gray-800">{displayValues.priority}</span>
+          <span className="font-semibold text-gray-900">Priority:</span>
+          <span className="text-gray-900">{displayValues.priority}</span>
           
-          <span className="font-semibold text-purple-800">Delay:</span>
-          <span className="text-gray-800">{displayValues.packetDelay}</span>
+          <span className="font-semibold text-gray-900">Delay:</span>
+          <span className="text-gray-900">{displayValues.packetDelay}</span>
         </div>
       </div>
       
