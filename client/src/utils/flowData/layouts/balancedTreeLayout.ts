@@ -23,15 +23,15 @@ const getNodeWidth = (nodeId: string, nodeType?: string): number => {
     'default'
   );
   
-  // Real rendered widths based on CSS and content
+  // Real rendered widths based on CSS and content - INCREASED SIZES
   switch (type) {
-    case 's-nssai': return 360; // S-NSSAI nodes are wider due to content
-    case 'dnn': return 320; // DNN nodes are medium width
-    case 'rrp': return 240; // RRP nodes
-    case 'rrpmember': return 120; // RRP Member nodes are compact
-    case 'qosflow': return 300; // QoS Flow nodes
-    case 'fiveqi': return 280; // 5QI nodes
-    default: return 180; // Default fallback
+    case 's-nssai': return 480; // S-NSSAI nodes are wider due to content
+    case 'dnn': return 420; // DNN nodes are medium width
+    case 'rrp': return 320; // RRP nodes
+    case 'rrpmember': return 240; // RRP Member nodes are compact
+    case 'qosflow': return 400; // QoS Flow nodes
+    case 'fiveqi': return 380; // 5QI nodes
+    default: return 280; // Default fallback
   }
 };
 
@@ -164,9 +164,9 @@ export const arrangeNodesInBalancedTree = (
   }
 
   const {
-    nodeWidth = 180,
+    nodeWidth = 280,
     nodeHeight = 120,
-    horizontalSpacing = 140,  // Compact default for better overview
+    horizontalSpacing = 80,  // Tighter horizontal spacing
     verticalSpacing = 160,   // Adequate vertical separation
     marginX = 96,            // Compact margin for better viewport usage
     marginY = 100

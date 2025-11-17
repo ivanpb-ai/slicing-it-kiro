@@ -14,9 +14,9 @@ export const testBalancedLayoutWithExample = (): { nodes: Node[]; edges: Edge[] 
   // Apply the improved balanced tree layout
   const arrangedNodes = arrangeNodes(exampleNodes as Node[], exampleEdges as Edge[], {
     type: 'balanced-tree',
-    nodeWidth: 180,
+    nodeWidth: 280,
     nodeHeight: 120,
-    horizontalSpacing: 250,
+    horizontalSpacing: 80,
     verticalSpacing: 180,
     marginX: 400,
     marginY: 100,

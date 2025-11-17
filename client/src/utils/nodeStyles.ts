@@ -88,26 +88,26 @@ export const getPadding = (nodeType: string): string => {
 export const getWidth = (nodeType: string, rrpPercentage?: number): string => {
   switch (nodeType) {
     case "network":
-      return "min-w-[240px]";
+      return "min-w-[320px]";
     case "cell-area":
-      return "min-w-[200px]";
+      return "min-w-[280px]";
     case "rrp":
-      const baseWidth = 240; 
+      const baseWidth = 320; 
       const percentage = rrpPercentage || 100;
-      const scaledWidth = Math.max(baseWidth * (percentage / 100), 180);
+      const scaledWidth = Math.max(baseWidth * (percentage / 100), 240);
       return `min-w-[${scaledWidth}px]`;
     case "rrpmember":
-      return "min-w-[180px]";
-    case "s-nssai":
-      return "min-w-[220px]";
-    case "dnn":
       return "min-w-[240px]";
+    case "s-nssai":
+      return "min-w-[300px]";
+    case "dnn":
+      return "min-w-[320px]";
     case "fiveqi":
-      return "min-w-[220px]";
+      return "min-w-[300px]";
     case "qosflow":
-      return "min-w-[200px]";
+      return "min-w-[280px]";
     default:
-      return "min-w-[200px]";
+      return "min-w-[280px]";
   }
 };
 

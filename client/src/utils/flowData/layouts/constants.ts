@@ -10,7 +10,7 @@ export const HIERARCHY_LEVELS: { [key: string]: number } = {
 };
 
 export const VERTICAL_SPACING = 200;
-export const HORIZONTAL_SPACING = 240;
+export const HORIZONTAL_SPACING = 120;
 export const INITIAL_Y_OFFSET = 80;
 export const INITIAL_X_OFFSET = 80;
 
