@@ -23,14 +23,16 @@ const getNodeWidth = (nodeId: string, nodeType?: string): number => {
     'default'
   );
   
-  // Real rendered widths based on CSS and content - INCREASED SIZES
+  // Real rendered widths based on CSS and content - INCREASED SIZES (matching CSS min-w values)
   switch (type) {
-    case 's-nssai': return 480; // S-NSSAI nodes are wider due to content
-    case 'dnn': return 420; // DNN nodes are medium width
+    case 's-nssai': return 300; // S-NSSAI nodes
+    case 'dnn': return 320; // DNN nodes
     case 'rrp': return 320; // RRP nodes
-    case 'rrpmember': return 240; // RRP Member nodes are compact
-    case 'qosflow': return 400; // QoS Flow nodes
-    case 'fiveqi': return 380; // 5QI nodes
+    case 'rrpmember': return 240; // RRP Member nodes
+    case 'qosflow': return 280; // QoS Flow nodes
+    case 'fiveqi': return 300; // 5QI nodes
+    case 'network': return 320; // Network nodes
+    case 'cell-area': return 280; // Cell Area nodes
     default: return 280; // Default fallback
   }
 };
@@ -376,7 +378,7 @@ export const arrangeNodesInBalancedTree = (
       const childBounds: { leftX: number; rightX: number; centerX: number }[] = [];
       
       // Level-scaled baseline from horizontalSpacing option for better compactness
-      const scaleByLevel = level <= 0 ? 1.1 : level <= 1 ? 1.0 : level <= 2 ? 0.9 : 0.8;
+      const scaleByLevel = level <= 0 ? 1.2 : level <= 1 ? 1.1 : level <= 2 ? 1.0 : 0.95;
       const baseGutter = horizontalSpacing * scaleByLevel;
       
       // Calculate average subtree width of children to adjust spacing dynamically
@@ -390,7 +392,7 @@ export const arrangeNodesInBalancedTree = (
       
       // Gentle modulation factor for spacing (much more conservative)
       const subtreeWidthFactor = Math.max(0.9, Math.min(1.05, Math.sqrt(avgChildSubtreeWidth / 400)));
-      const gutter = Math.round(baseGutter * subtreeWidthFactor);
+      const gutter = Math.max(60, Math.round(baseGutter * subtreeWidthFactor)); // Minimum 60px gutter to prevent overlaps
       
       console.log(`✓ Level ${level} spacing: base=${baseGutter}, factor=${subtreeWidthFactor.toFixed(2)}, final=${gutter}`);
       
