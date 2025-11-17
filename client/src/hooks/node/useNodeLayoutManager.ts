@@ -49,18 +49,18 @@ export const useNodeLayoutManager = (
       return;
     }
 
-    // Layout options with compact spacing for better overview while maintaining readability
+    // Layout options with proper spacing to prevent overlaps
     const layoutOptions = {
       type: 'balanced-tree' as LayoutType,
-      horizontalSpacing: 140,     // COMPACT: Reduced from 400px for better overview
-      verticalSpacing: 160,       // Adequate vertical spacing for RRP nodes (reduced from 450)
-      nodeWidth: 180,
+      horizontalSpacing: 150,     // Increased to prevent overlaps
+      verticalSpacing: 160,       // Adequate vertical spacing for RRP nodes
+      nodeWidth: 280,             // Updated to match new node sizes
       nodeHeight: 120,
-      marginX: 96,               // COMPACT: Reduced margin for better viewport usage
+      marginX: 96,               // Compact margin for better viewport usage
       marginY: 250,              // Keep adequate top margin for RRP nodes
       preventOverlap: true,
       edgeShortenFactor: 0.95,
-      minNodeDistance: 50         
+      minNodeDistance: 100        // Increased minimum distance
     };
 
     try {
