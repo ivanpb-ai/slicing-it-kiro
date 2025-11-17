@@ -168,7 +168,7 @@ export const arrangeNodesInBalancedTree = (
   const {
     nodeWidth = 280,
     nodeHeight = 120,
-    horizontalSpacing = 80,  // Tighter horizontal spacing
+    horizontalSpacing = 150,  // Increased spacing to prevent overlaps
     verticalSpacing = 160,   // Adequate vertical separation
     marginX = 96,            // Compact margin for better viewport usage
     marginY = 100
@@ -377,9 +377,8 @@ export const arrangeNodesInBalancedTree = (
       let currentX = 0;
       const childBounds: { leftX: number; rightX: number; centerX: number }[] = [];
       
-      // Level-scaled baseline from horizontalSpacing option for better compactness
-      const scaleByLevel = level <= 0 ? 1.2 : level <= 1 ? 1.1 : level <= 2 ? 1.0 : 0.95;
-      const baseGutter = horizontalSpacing * scaleByLevel;
+      // Use consistent spacing across all levels to prevent overlaps
+      const baseGutter = horizontalSpacing;
       
       // Calculate average subtree width of children to adjust spacing dynamically
       const childSubtreeWidths = children.map(childId => {
@@ -390,9 +389,9 @@ export const arrangeNodesInBalancedTree = (
         ? childSubtreeWidths.reduce((sum, w) => sum + w, 0) / childSubtreeWidths.length 
         : 200;
       
-      // Gentle modulation factor for spacing (much more conservative)
-      const subtreeWidthFactor = Math.max(0.9, Math.min(1.05, Math.sqrt(avgChildSubtreeWidth / 400)));
-      const gutter = Math.max(60, Math.round(baseGutter * subtreeWidthFactor)); // Minimum 60px gutter to prevent overlaps
+      // More conservative spacing - ensure adequate gaps
+      const subtreeWidthFactor = Math.max(1.0, Math.min(1.2, Math.sqrt(avgChildSubtreeWidth / 300)));
+      const gutter = Math.max(100, Math.round(baseGutter * subtreeWidthFactor)); // Minimum 100px gutter to prevent overlaps
       
       console.log(`✓ Level ${level} spacing: base=${baseGutter}, factor=${subtreeWidthFactor.toFixed(2)}, final=${gutter}`);
       

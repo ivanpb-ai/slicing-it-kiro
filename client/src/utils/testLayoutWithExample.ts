@@ -16,7 +16,7 @@ export const testBalancedLayoutWithExample = (): { nodes: Node[]; edges: Edge[] 
     type: 'balanced-tree',
     nodeWidth: 280,
     nodeHeight: 120,
-    horizontalSpacing: 80,
+    horizontalSpacing: 150,
     verticalSpacing: 180,
     marginX: 400,
     marginY: 100,
