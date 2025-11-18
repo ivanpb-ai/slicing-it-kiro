@@ -355,8 +355,23 @@ export const arrangeNodesInBalancedTree = (
   // Position nodes using bottom-up approach for balanced layout
   const nodePositionMap: Record<string, { x: number; y: number }> = {};
   
+  // Track which nodes have been positioned to handle DAG (nodes with multiple parents)
+  const positionedNodes = new Set<string>();
+  
   // Function to recursively position subtrees from leaves up to parents
   const positionSubtreeBottomUp = (nodeId: string, level: number): { leftX: number; rightX: number; centerX: number } => {
+    // If node already positioned (has multiple parents), return its existing bounds
+    if (positionedNodes.has(nodeId) && nodePositionMap[nodeId]) {
+      const pos = nodePositionMap[nodeId];
+      const width = getNodeWidth(nodeId);
+      console.log(`⚠️ Node ${nodeId} already positioned at (${pos.x}, ${pos.y}) - skipping (multiple parents)`);
+      return {
+        leftX: pos.x,
+        rightX: pos.x + width,
+        centerX: pos.x + width / 2
+      };
+    }
+    
     const children = childrenMap[nodeId] || [];
     
     // FIXED: Use height-aware Y positioning based on actual level heights
@@ -374,6 +389,7 @@ export const arrangeNodesInBalancedTree = (
       const rightX = centerX + nodeWidth / 2;
       
       nodePositionMap[nodeId] = { x: leftX, y };
+      positionedNodes.add(nodeId);
       console.log(`✓ Leaf ${nodeId} positioned at (${leftX}, ${y}) - will be adjusted by parent`);
       
       return { leftX, rightX, centerX };
@@ -408,12 +424,17 @@ export const arrangeNodesInBalancedTree = (
       });
       
       // For balanced tree with equal edge lengths, position children so their CENTERS are equally spaced
-      // Use the maximum subtree width to ensure no overlaps, but apply it consistently
+      // CRITICAL: For equal edge lengths, we need equal center-to-center spacing
+      // Use the maximum SUBTREE width (not just node width) to prevent overlaps
       const maxSubtreeWidth = Math.max(...tempChildBounds.map(b => b.rightX - b.leftX));
       
       // Calculate the spacing between child centers (center-to-center distance)
-      // This should be consistent for all children to ensure equal edge lengths
+      // This must be consistent for all children to ensure equal edge lengths from parent
       const childCenterSpacing = maxSubtreeWidth + gutter;
+      
+      console.log(`🎯 EQUAL SPACING: Parent ${nodeId} has ${children.length} children`);
+      console.log(`   - Subtree widths: ${tempChildBounds.map(b => (b.rightX - b.leftX).toFixed(0)).join(', ')}`);
+      console.log(`   - Max subtree width: ${maxSubtreeWidth.toFixed(0)}, gutter: ${gutter}, spacing: ${childCenterSpacing.toFixed(0)}`);
       
       // Calculate total span of child centers
       const totalCenterSpan = (children.length - 1) * childCenterSpacing;
@@ -438,6 +459,8 @@ export const arrangeNodesInBalancedTree = (
         
         // Calculate shift needed to move child's center to target position
         const childShift = targetCenterX - bounds.centerX;
+        
+        console.log(`🎯 Child ${index} (${childId}): originalCenter=${bounds.centerX.toFixed(1)}, targetCenter=${targetCenterX.toFixed(1)}, shift=${childShift.toFixed(1)}`);
         
         // Apply shift to child and all its descendants
         if (childShift !== 0) {
@@ -476,6 +499,7 @@ export const arrangeNodesInBalancedTree = (
       const parentX = subtreeCenterX - nodeWidth / 2;
       
       nodePositionMap[nodeId] = { x: parentX, y };
+      positionedNodes.add(nodeId);
       console.log(`✓ Parent ${nodeId} centered over children at (${Math.round(parentX)}, ${y})`);
       
       return { 
