@@ -53,7 +53,7 @@ export const useNodeLayoutManager = (
     const layoutOptions = {
       type: 'balanced-tree' as LayoutType,
       horizontalSpacing: 150,     // Increased to prevent overlaps
-      verticalSpacing: 160,       // Adequate vertical spacing for RRP nodes
+      verticalSpacing: 220,       // Increased vertical spacing to prevent overlaps
       nodeWidth: 280,             // Updated to match new node sizes
       nodeHeight: 120,
       marginX: 96,               // Compact margin for better viewport usage

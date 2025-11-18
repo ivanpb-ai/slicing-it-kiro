@@ -41,6 +41,8 @@ const getNodeWidth = (nodeId: string, nodeType?: string): number => {
 const getNodeHeight = (nodeId: string, nodeType?: string): number => {
   // Use node type if provided, otherwise infer from ID
   const type = nodeType || (
+    nodeId.includes('network') ? 'network' :
+    nodeId.includes('cell-area') ? 'cell-area' :
     nodeId.includes('s-nssai') ? 's-nssai' :
     nodeId.includes('dnn') ? 'dnn' :
     nodeId.includes('rrpmember') ? 'rrpmember' :
@@ -51,13 +53,16 @@ const getNodeHeight = (nodeId: string, nodeType?: string): number => {
   );
   
   // Real rendered heights based on CSS and content - RRP nodes are notably taller
+  // Heights increased to account for padding and borders
   switch (type) {
-    case 'rrp': return 340; // RRP nodes are significantly taller due to complex content
-    case 's-nssai': return 150; // S-NSSAI nodes have medium height
-    case 'dnn': return 140; // DNN nodes have medium height
-    case 'qosflow': return 130; // QoS Flow nodes
-    case 'rrpmember': return 120; // RRP Member nodes are shorter
-    case 'fiveqi': return 120; // 5QI nodes are compact
+    case 'network': return 160; // Network nodes
+    case 'cell-area': return 160; // Cell Area nodes
+    case 'rrp': return 380; // RRP nodes are significantly taller due to complex content
+    case 's-nssai': return 180; // S-NSSAI nodes have medium height (increased for safety)
+    case 'dnn': return 180; // DNN nodes have medium height (increased for safety)
+    case 'qosflow': return 160; // QoS Flow nodes
+    case 'rrpmember': return 140; // RRP Member nodes are shorter
+    case 'fiveqi': return 160; // 5QI nodes are compact
     default: return 120; // Default fallback
   }
 };
@@ -333,7 +338,7 @@ export const arrangeNodesInBalancedTree = (
   }
   
   // Calculate cumulative Y positions with adequate gaps
-  const minGap = 160; // Minimum gap between levels, especially important for RRP → RRP Member
+  const minGap = Math.max(verticalSpacing, 220); // Use verticalSpacing or minimum 220px to prevent overlaps
   levelY.set(0, marginY); // Root level starts at marginY
   
   for (let level = 1; level <= maxLevel; level++) {
@@ -374,7 +379,6 @@ export const arrangeNodesInBalancedTree = (
       return { leftX, rightX, centerX };
     } else {
       // Internal node: position children first, then center parent over them
-      let currentX = 0;
       const childBounds: { leftX: number; rightX: number; centerX: number }[] = [];
       
       // Use consistent spacing across all levels to prevent overlaps
@@ -395,10 +399,25 @@ export const arrangeNodesInBalancedTree = (
       
       console.log(`✓ Level ${level} spacing: base=${baseGutter}, factor=${subtreeWidthFactor.toFixed(2)}, final=${gutter}`);
       
-      // Position all children from left to right
-      children.forEach((childId, index) => {
+      // First pass: position all children and collect their bounds
+      const tempChildBounds: { leftX: number; rightX: number; centerX: number }[] = [];
+      children.forEach((childId) => {
         const childLevel = level + 1;
         const bounds = positionSubtreeBottomUp(childId, childLevel);
+        tempChildBounds.push(bounds);
+      });
+      
+      // Calculate total width needed for all children
+      const totalChildrenWidth = tempChildBounds.reduce((sum, bounds) => sum + (bounds.rightX - bounds.leftX), 0);
+      const totalGutterWidth = (children.length - 1) * gutter;
+      const totalWidth = totalChildrenWidth + totalGutterWidth;
+      
+      // Start positioning from center (0) and work outward for symmetry
+      let currentX = -totalWidth / 2;
+      
+      // Second pass: apply shifts to center children symmetrically
+      children.forEach((childId, index) => {
+        const bounds = tempChildBounds[index];
         
         // CRITICAL FIX: Adjust child position AND ALL DESCENDANTS in the subtree
         const childShift = currentX - bounds.leftX;
