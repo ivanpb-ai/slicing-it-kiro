@@ -555,11 +555,14 @@ export const arrangeNodesInBalancedTree = (
     };
     
     // Apply anchor shift to root and all its descendants
+    // Track anchored nodes to avoid anchoring nodes with multiple parents twice
+    const anchoredNodes = new Set<string>();
     const nodesToShift = [rootId, ...findAllDescendants(rootId)];
     nodesToShift.forEach(nodeId => {
-      if (nodePositionMap[nodeId]) {
+      if (nodePositionMap[nodeId] && !anchoredNodes.has(nodeId)) {
         nodePositionMap[nodeId].x += dx;
         nodePositionMap[nodeId].y += dy;
+        anchoredNodes.add(nodeId);
         console.log(`📍 Anchored ${nodeId} to (${nodePositionMap[nodeId].x.toFixed(1)}, ${nodePositionMap[nodeId].y.toFixed(1)})`);
       }
     });
