@@ -408,8 +408,12 @@ export const arrangeNodesInBalancedTree = (
       });
       
       // For balanced tree with equal edge lengths, position children so their CENTERS are equally spaced
-      // Calculate the spacing between child centers
-      const childCenterSpacing = gutter + Math.max(...tempChildBounds.map(b => b.rightX - b.leftX));
+      // Use the maximum subtree width to ensure no overlaps, but apply it consistently
+      const maxSubtreeWidth = Math.max(...tempChildBounds.map(b => b.rightX - b.leftX));
+      
+      // Calculate the spacing between child centers (center-to-center distance)
+      // This should be consistent for all children to ensure equal edge lengths
+      const childCenterSpacing = maxSubtreeWidth + gutter;
       
       // Calculate total span of child centers
       const totalCenterSpan = (children.length - 1) * childCenterSpacing;
