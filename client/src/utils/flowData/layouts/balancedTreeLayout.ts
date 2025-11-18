@@ -407,36 +407,38 @@ export const arrangeNodesInBalancedTree = (
         tempChildBounds.push(bounds);
       });
       
-      // Calculate total width needed for all children
-      const totalChildrenWidth = tempChildBounds.reduce((sum, bounds) => sum + (bounds.rightX - bounds.leftX), 0);
-      const totalGutterWidth = (children.length - 1) * gutter;
-      const totalWidth = totalChildrenWidth + totalGutterWidth;
+      // For balanced tree with equal edge lengths, position children so their CENTERS are equally spaced
+      // Calculate the spacing between child centers
+      const childCenterSpacing = gutter + Math.max(...tempChildBounds.map(b => b.rightX - b.leftX));
       
-      // Start positioning from center (0) and work outward for symmetry
-      let currentX = -totalWidth / 2;
+      // Calculate total span of child centers
+      const totalCenterSpan = (children.length - 1) * childCenterSpacing;
       
-      // Second pass: apply shifts to center children symmetrically
+      // Start from center and position children symmetrically
+      const startCenterX = -totalCenterSpan / 2;
+      
+      // Helper function to find all descendants
+      const findAllDescendants = (parentId: string): string[] => {
+        const directChildren = childrenMap[parentId] || [];
+        const allDescendants = [...directChildren];
+        directChildren.forEach(childId => {
+          allDescendants.push(...findAllDescendants(childId));
+        });
+        return allDescendants;
+      };
+      
+      // Second pass: position each child so its center is at the calculated position
       children.forEach((childId, index) => {
         const bounds = tempChildBounds[index];
+        const targetCenterX = startCenterX + (index * childCenterSpacing);
         
-        // CRITICAL FIX: Adjust child position AND ALL DESCENDANTS in the subtree
-        const childShift = currentX - bounds.leftX;
+        // Calculate shift needed to move child's center to target position
+        const childShift = targetCenterX - bounds.centerX;
         
-        // Apply shift to ALL nodes that were positioned in this child's subtree
+        // Apply shift to child and all its descendants
         if (childShift !== 0) {
-          console.log(`🔧 Shifting child ${childId} subtree by ${childShift}px`);
+          console.log(`🔧 Shifting child ${childId} subtree by ${childShift}px to center at ${targetCenterX}`);
           
-          // Find all descendants of this child
-          const findAllDescendants = (parentId: string): string[] => {
-            const directChildren = childrenMap[parentId] || [];
-            const allDescendants = [...directChildren];
-            directChildren.forEach(childId => {
-              allDescendants.push(...findAllDescendants(childId));
-            });
-            return allDescendants;
-          };
-          
-          // Shift the child and all its descendants
           const nodesToShift = [childId, ...findAllDescendants(childId)];
           nodesToShift.forEach(nodeId => {
             if (nodePositionMap[nodeId]) {
@@ -449,13 +451,10 @@ export const arrangeNodesInBalancedTree = (
         const shiftedBounds = {
           leftX: bounds.leftX + childShift,
           rightX: bounds.rightX + childShift,
-          centerX: bounds.centerX + childShift
+          centerX: targetCenterX  // Use exact target center
         };
         
         childBounds.push(shiftedBounds);
-        
-        // Move cursor for next child
-        currentX = shiftedBounds.rightX + gutter;
       });
       
       // Calculate parent bounds based on children
