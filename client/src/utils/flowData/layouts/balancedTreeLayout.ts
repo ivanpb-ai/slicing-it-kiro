@@ -11,8 +11,18 @@ interface BalancedTreeOptions {
 }
 
 // Helper function to get actual node width based on type (matching real rendered widths)
-const getNodeWidth = (nodeId: string, nodeType?: string): number => {
-  // Use node type if provided, otherwise infer from ID (check rrpmember before rrp to avoid misclassification)
+// Now uses actual measured dimensions from React Flow when available
+const getNodeWidth = (nodeId: string, nodeType?: string, nodes?: Node[]): number => {
+  // First, try to get actual measured width from React Flow
+  if (nodes) {
+    const node = nodes.find(n => n.id === nodeId);
+    if (node && node.measured?.width) {
+      console.log(`📏 Using measured width for ${nodeId}: ${node.measured.width}px`);
+      return node.measured.width;
+    }
+  }
+  
+  // Fallback to estimated widths based on type
   const type = nodeType || (
     nodeId.includes('s-nssai') ? 's-nssai' :
     nodeId.includes('dnn') ? 'dnn' :
@@ -20,6 +30,8 @@ const getNodeWidth = (nodeId: string, nodeType?: string): number => {
     nodeId.includes('rrp') ? 'rrp' :
     nodeId.includes('qosflow') ? 'qosflow' :
     nodeId.includes('fiveqi') ? 'fiveqi' :
+    nodeId.includes('network') ? 'network' :
+    nodeId.includes('cell-area') ? 'cell-area' :
     'default'
   );
   
@@ -90,7 +102,7 @@ const calculateSubtreeWidths = (
     
     nodesAtLevel.forEach(nodeId => {
       const children = childrenMap[nodeId] || [];
-      const nodeWidth = getNodeWidth(nodeId);
+      const nodeWidth = getNodeWidth(nodeId, undefined, nodesRef);
       
       if (children.length === 0) {
         // Leaf node: subtree width = own width
@@ -110,7 +122,7 @@ const calculateSubtreeWidths = (
         childGroups.forEach(typeChildren => {
           // Calculate total width for this type group
           const totalChildWidth = typeChildren.reduce((sum, childId) => {
-            return sum + (subtreeWidths.get(childId) || getNodeWidth(childId));
+            return sum + (subtreeWidths.get(childId) || getNodeWidth(childId, undefined, nodesRef));
           }, 0);
           const totalGutterWidth = (typeChildren.length - 1) * gutter;
           const groupWidth = totalChildWidth + totalGutterWidth;
@@ -158,6 +170,8 @@ export const arrangeNodesInBalancedTree = (
   edges: Edge[],
   options: BalancedTreeOptions = {}
 ): { nodes: Node[], cleanedEdges: Edge[] } => {
+  // Store nodes reference for width measurements
+  const nodesRef = nodes;
   console.log('🚀 arrangeNodesInBalancedTree CALLED! This confirms we are running the correct algorithm');
   console.log('🔧 Received options:', options);
   console.log('🔧 Input nodes count:', nodes.length, 'edges count:', edges?.length || 0);
@@ -363,7 +377,7 @@ export const arrangeNodesInBalancedTree = (
     // If node already positioned (has multiple parents), return its existing bounds
     if (positionedNodes.has(nodeId) && nodePositionMap[nodeId]) {
       const pos = nodePositionMap[nodeId];
-      const width = getNodeWidth(nodeId);
+      const width = getNodeWidth(nodeId, undefined, nodesRef);
       console.log(`⚠️ Node ${nodeId} already positioned at (${pos.x}, ${pos.y}) - skipping (multiple parents)`);
       return {
         leftX: pos.x,
@@ -380,7 +394,7 @@ export const arrangeNodesInBalancedTree = (
     
     if (children.length === 0) {
       // Leaf node: return bounds centered at 0 (fixed for bottom-up algorithm)
-      const nodeWidth = getNodeWidth(nodeId);
+      const nodeWidth = getNodeWidth(nodeId, undefined, nodesRef);
       
       // CRITICAL FIX: Return relative bounds centered at 0 for proper bottom-up positioning
       // Position will be finalized when parent applies shift
@@ -402,7 +416,7 @@ export const arrangeNodesInBalancedTree = (
       
       // Calculate average subtree width of children to adjust spacing dynamically
       const childSubtreeWidths = children.map(childId => {
-        const subtreeWidth = subtreeWidths.get(childId) || getNodeWidth(childId);
+        const subtreeWidth = subtreeWidths.get(childId) || getNodeWidth(childId, undefined, nodesRef);
         return subtreeWidth;
       });
       const avgChildSubtreeWidth = childSubtreeWidths.length > 0 
@@ -495,7 +509,7 @@ export const arrangeNodesInBalancedTree = (
       const subtreeCenterX = 0;
       
       // Position parent centered over children
-      const nodeWidth = getNodeWidth(nodeId);
+      const nodeWidth = getNodeWidth(nodeId, undefined, nodesRef);
       const parentX = subtreeCenterX - nodeWidth / 2;
       
       nodePositionMap[nodeId] = { x: parentX, y };
@@ -592,7 +606,7 @@ export const arrangeNodesInBalancedTree = (
       const parentCenters = parents.map(parentId => {
         const parentPos = nodePositionMap[parentId];
         if (parentPos) {
-          const parentWidth = getNodeWidth(parentId);
+          const parentWidth = getNodeWidth(parentId, undefined, nodesRef);
           return parentPos.x + parentWidth / 2;
         }
         return null;
@@ -600,7 +614,7 @@ export const arrangeNodesInBalancedTree = (
       
       if (parentCenters.length > 1) {
         const avgParentCenterX = parentCenters.reduce((sum, x) => sum + x, 0) / parentCenters.length;
-        const nodeWidth = getNodeWidth(nodeId);
+        const nodeWidth = getNodeWidth(nodeId, undefined, nodesRef);
         const newX = avgParentCenterX - nodeWidth / 2;
         const oldX = nodePositionMap[nodeId].x;
         const shiftX = newX - oldX;
