@@ -574,6 +574,17 @@ export const arrangeNodesInBalancedTree = (
 
   // CRITICAL FIX: Reposition nodes with multiple parents to be centered between all parents
   console.log(`🔧 Repositioning nodes with multiple parents to center them...`);
+  
+  // Helper to find all descendants
+  const findAllDescendantsForShift = (parentId: string): string[] => {
+    const directChildren = childrenMap[parentId] || [];
+    const allDescendants = [...directChildren];
+    directChildren.forEach(childId => {
+      allDescendants.push(...findAllDescendantsForShift(childId));
+    });
+    return allDescendants;
+  };
+  
   Object.keys(allParentsMap).forEach(nodeId => {
     const parents = allParentsMap[nodeId];
     if (parents && parents.length > 1 && nodePositionMap[nodeId]) {
@@ -591,9 +602,19 @@ export const arrangeNodesInBalancedTree = (
         const avgParentCenterX = parentCenters.reduce((sum, x) => sum + x, 0) / parentCenters.length;
         const nodeWidth = getNodeWidth(nodeId);
         const newX = avgParentCenterX - nodeWidth / 2;
+        const oldX = nodePositionMap[nodeId].x;
+        const shiftX = newX - oldX;
         
-        console.log(`🎯 Centering ${nodeId} between ${parents.length} parents: ${parentCenters.map(x => x.toFixed(0)).join(', ')} → center at ${avgParentCenterX.toFixed(0)}`);
-        nodePositionMap[nodeId].x = newX;
+        console.log(`🎯 Centering ${nodeId} between ${parents.length} parents: ${parentCenters.map(x => x.toFixed(0)).join(', ')} → center at ${avgParentCenterX.toFixed(0)}, shift=${shiftX.toFixed(1)}`);
+        
+        // Shift the node and all its descendants
+        const nodesToShift = [nodeId, ...findAllDescendantsForShift(nodeId)];
+        nodesToShift.forEach(id => {
+          if (nodePositionMap[id]) {
+            nodePositionMap[id].x += shiftX;
+            console.log(`  📍 Shifted ${id} by ${shiftX.toFixed(1)} to x=${nodePositionMap[id].x.toFixed(1)}`);
+          }
+        });
       }
     }
   });
