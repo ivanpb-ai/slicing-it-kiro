@@ -425,8 +425,9 @@ export const arrangeNodesInBalancedTree = (
         : 200;
       
       // More conservative spacing - ensure adequate gaps
-      const subtreeWidthFactor = Math.max(1.0, Math.min(1.2, Math.sqrt(avgChildSubtreeWidth / 300)));
-      const gutter = Math.max(100, Math.round(baseGutter * subtreeWidthFactor)); // Minimum 100px gutter to prevent overlaps
+      // For complex graphs with large subtrees, use smaller gutters
+      const subtreeWidthFactor = Math.max(0.5, Math.min(1.0, Math.sqrt(avgChildSubtreeWidth / 1000)));
+      const gutter = Math.max(50, Math.round(baseGutter * subtreeWidthFactor)); // Minimum 50px gutter
       
       console.log(`✓ Level ${level} spacing: base=${baseGutter}, factor=${subtreeWidthFactor.toFixed(2)}, final=${gutter}`);
       
@@ -438,18 +439,20 @@ export const arrangeNodesInBalancedTree = (
         tempChildBounds.push(bounds);
       });
       
-      // For balanced tree with equal edge lengths, position children so their CENTERS are equally spaced
-      // CRITICAL: For equal edge lengths, we need equal center-to-center spacing
-      // Use the maximum SUBTREE width (not just node width) to prevent overlaps
-      const maxSubtreeWidth = Math.max(...tempChildBounds.map(b => b.rightX - b.leftX));
+      // For compact layout with varying subtree widths, use adaptive spacing
+      // Calculate average subtree width for more balanced spacing
+      const subtreeWidthsList = tempChildBounds.map(b => b.rightX - b.leftX);
+      const avgSubtreeWidth = subtreeWidthsList.reduce((sum, w) => sum + w, 0) / subtreeWidthsList.length;
+      const maxSubtreeWidth = Math.max(...subtreeWidthsList);
       
-      // Calculate the spacing between child centers (center-to-center distance)
-      // This must be consistent for all children to ensure equal edge lengths from parent
-      const childCenterSpacing = maxSubtreeWidth + gutter;
+      // Use average width for spacing to keep layout more compact
+      // But ensure minimum spacing based on largest subtree
+      const baseSpacing = Math.min(avgSubtreeWidth * 1.2, maxSubtreeWidth);
+      const childCenterSpacing = baseSpacing + gutter;
       
-      console.log(`🎯 EQUAL SPACING: Parent ${nodeId} has ${children.length} children`);
-      console.log(`   - Subtree widths: ${tempChildBounds.map(b => (b.rightX - b.leftX).toFixed(0)).join(', ')}`);
-      console.log(`   - Max subtree width: ${maxSubtreeWidth.toFixed(0)}, gutter: ${gutter}, spacing: ${childCenterSpacing.toFixed(0)}`);
+      console.log(`🎯 ADAPTIVE SPACING: Parent ${nodeId} has ${children.length} children`);
+      console.log(`   - Subtree widths: ${subtreeWidthsList.map(w => w.toFixed(0)).join(', ')}`);
+      console.log(`   - Avg: ${avgSubtreeWidth.toFixed(0)}, Max: ${maxSubtreeWidth.toFixed(0)}, Spacing: ${childCenterSpacing.toFixed(0)}`);
       
       // Calculate total span of child centers
       const totalCenterSpan = (children.length - 1) * childCenterSpacing;
