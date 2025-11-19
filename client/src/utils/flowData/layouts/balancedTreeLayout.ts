@@ -91,7 +91,8 @@ const calculateSubtreeWidths = (
   allParentsMap: Record<string, string[]>,
   nodesByLevel: Map<number, string[]>,
   maxLevel: number,
-  horizontalSpacing: number
+  horizontalSpacing: number,
+  nodes: Node[]
 ): Map<string, number> => {
   const subtreeWidths = new Map<string, number>();
   const gutter = horizontalSpacing; // Use provided horizontal spacing
@@ -102,7 +103,7 @@ const calculateSubtreeWidths = (
     
     nodesAtLevel.forEach(nodeId => {
       const children = childrenMap[nodeId] || [];
-      const nodeWidth = getNodeWidth(nodeId, undefined, nodesRef);
+      const nodeWidth = getNodeWidth(nodeId, undefined, nodes);
       
       if (children.length === 0) {
         // Leaf node: subtree width = own width
@@ -122,7 +123,7 @@ const calculateSubtreeWidths = (
         childGroups.forEach(typeChildren => {
           // Calculate total width for this type group
           const totalChildWidth = typeChildren.reduce((sum, childId) => {
-            return sum + (subtreeWidths.get(childId) || getNodeWidth(childId, undefined, nodesRef));
+            return sum + (subtreeWidths.get(childId) || getNodeWidth(childId, undefined, nodes));
           }, 0);
           const totalGutterWidth = (typeChildren.length - 1) * gutter;
           const groupWidth = totalChildWidth + totalGutterWidth;
@@ -332,7 +333,7 @@ export const arrangeNodesInBalancedTree = (
   });
   
   console.log('🔧 Calculating subtree widths for overlap prevention...');
-  const subtreeWidths = calculateSubtreeWidths(childrenMap, allParentsMap, nodesByLevelMap, maxLevel, horizontalSpacing);
+  const subtreeWidths = calculateSubtreeWidths(childrenMap, allParentsMap, nodesByLevelMap, maxLevel, horizontalSpacing, nodesRef);
   console.log('🔧 Subtree widths calculated:', Object.fromEntries(Array.from(subtreeWidths.entries()).slice(0, 5)));
   
   // Calculate height-aware level Y positions to prevent overlaps
