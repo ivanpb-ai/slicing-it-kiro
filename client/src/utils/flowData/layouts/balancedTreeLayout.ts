@@ -572,6 +572,32 @@ export const arrangeNodesInBalancedTree = (
 
   console.log(`🎯 Layout completed with anchored roots - network nodes stay fixed, children arranged relative to them`);
 
+  // CRITICAL FIX: Reposition nodes with multiple parents to be centered between all parents
+  console.log(`🔧 Repositioning nodes with multiple parents to center them...`);
+  Object.keys(allParentsMap).forEach(nodeId => {
+    const parents = allParentsMap[nodeId];
+    if (parents && parents.length > 1 && nodePositionMap[nodeId]) {
+      // Calculate center X position of all parents
+      const parentCenters = parents.map(parentId => {
+        const parentPos = nodePositionMap[parentId];
+        if (parentPos) {
+          const parentWidth = getNodeWidth(parentId);
+          return parentPos.x + parentWidth / 2;
+        }
+        return null;
+      }).filter(x => x !== null) as number[];
+      
+      if (parentCenters.length > 1) {
+        const avgParentCenterX = parentCenters.reduce((sum, x) => sum + x, 0) / parentCenters.length;
+        const nodeWidth = getNodeWidth(nodeId);
+        const newX = avgParentCenterX - nodeWidth / 2;
+        
+        console.log(`🎯 Centering ${nodeId} between ${parents.length} parents: ${parentCenters.map(x => x.toFixed(0)).join(', ')} → center at ${avgParentCenterX.toFixed(0)}`);
+        nodePositionMap[nodeId].x = newX;
+      }
+    }
+  });
+
   // FIXED: Ensure all nodes get positioned and validate completeness
   const positionedCount = Object.keys(nodePositionMap).length;
   const expectedCount = nodes.length;
