@@ -508,9 +508,11 @@ export const arrangeNodesInBalancedTree = (
       const subtreeLeftX = leftmostChild.leftX;
       const subtreeRightX = rightmostChild.rightX;
       
-      // FIXED: Parent should be centered at the midpoint of child CENTERS, not edges
-      // Since children are positioned symmetrically around 0, parent center should be at 0
-      const subtreeCenterX = 0;
+      // FIXED: Parent should be centered at the midpoint of child CENTERS
+      // Calculate the actual center based on first and last child positions
+      const firstChildCenter = childBounds[0].centerX;
+      const lastChildCenter = childBounds[childBounds.length - 1].centerX;
+      const subtreeCenterX = (firstChildCenter + lastChildCenter) / 2;
       
       // Position parent centered over children
       const nodeWidth = getNodeWidth(nodeId, undefined, nodesRef);
