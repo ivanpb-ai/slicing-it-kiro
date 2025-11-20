@@ -449,7 +449,11 @@ export const arrangeNodesInBalancedTree = (
       // This gives us spacing that's between the average and maximum, providing good balance
       const balancedWidth = (avgSubtreeWidth + maxSubtreeWidth) / 2;
       const baseSpacing = balancedWidth * 0.65; // Use 65% of balanced width for tighter but safe spacing
-      const childCenterSpacing = baseSpacing + gutter;
+      
+      // CRITICAL: Ensure minimum spacing to prevent sibling overlaps
+      // Spacing must be at least as wide as the widest subtree to guarantee no overlaps
+      const minSafeSpacing = maxSubtreeWidth;
+      const childCenterSpacing = Math.max(baseSpacing + gutter, minSafeSpacing + gutter);
       
       console.log(`🎯 ADAPTIVE SPACING: Parent ${nodeId} has ${children.length} children`);
       console.log(`   - Subtree widths: ${subtreeWidthsList.map(w => w.toFixed(0)).join(', ')}`);
