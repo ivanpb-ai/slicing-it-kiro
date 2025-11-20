@@ -450,10 +450,16 @@ export const arrangeNodesInBalancedTree = (
       const balancedWidth = (avgSubtreeWidth + maxSubtreeWidth) / 2;
       const baseSpacing = balancedWidth * 0.65; // Use 65% of balanced width for tighter but safe spacing
       
-      // CRITICAL: Ensure minimum spacing to prevent sibling overlaps
-      // Spacing must be at least as wide as the widest subtree to guarantee no overlaps
-      const minSafeSpacing = maxSubtreeWidth;
-      const childCenterSpacing = Math.max(baseSpacing + gutter, minSafeSpacing + gutter);
+      // Add extra spacing if any children have multiple parents (will be shifted later)
+      // This prevents overlaps when nodes get centered between parents
+      const hasMultiParentChildren = children.some(childId => {
+        const parents = allParentsMap[childId] || [];
+        return parents.length > 1;
+      });
+      
+      // If children have multiple parents, add 20% extra spacing as safety margin
+      const spacingMultiplier = hasMultiParentChildren ? 1.2 : 1.0;
+      const childCenterSpacing = (baseSpacing + gutter) * spacingMultiplier;
       
       console.log(`🎯 ADAPTIVE SPACING: Parent ${nodeId} has ${children.length} children`);
       console.log(`   - Subtree widths: ${subtreeWidthsList.map(w => w.toFixed(0)).join(', ')}`);
