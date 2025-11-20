@@ -450,15 +450,20 @@ export const arrangeNodesInBalancedTree = (
       const balancedWidth = (avgSubtreeWidth + maxSubtreeWidth) / 2;
       const baseSpacing = balancedWidth * 0.65; // Use 65% of balanced width for tighter but safe spacing
       
-      // Add extra spacing if any children have multiple parents (will be shifted later)
+      // Add extra spacing if any descendants have multiple parents (will be shifted later)
       // This prevents overlaps when nodes get centered between parents
-      const hasMultiParentChildren = children.some(childId => {
-        const parents = allParentsMap[childId] || [];
-        return parents.length > 1;
-      });
+      const hasMultiParentDescendants = (nodeId: string): boolean => {
+        const parents = allParentsMap[nodeId] || [];
+        if (parents.length > 1) return true;
+        
+        const nodeChildren = childrenMap[nodeId] || [];
+        return nodeChildren.some(childId => hasMultiParentDescendants(childId));
+      };
       
-      // If children have multiple parents, add 20% extra spacing as safety margin
-      const spacingMultiplier = hasMultiParentChildren ? 1.2 : 1.0;
+      const needsExtraSpacing = children.some(childId => hasMultiParentDescendants(childId));
+      
+      // If any descendant has multiple parents, add 25% extra spacing as safety margin
+      const spacingMultiplier = needsExtraSpacing ? 1.25 : 1.0;
       const childCenterSpacing = (baseSpacing + gutter) * spacingMultiplier;
       
       console.log(`🎯 ADAPTIVE SPACING: Parent ${nodeId} has ${children.length} children`);
