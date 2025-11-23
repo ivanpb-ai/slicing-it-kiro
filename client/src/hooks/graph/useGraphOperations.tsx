@@ -88,6 +88,10 @@ export const useGraphOperations = (
             setEdges(graphData.edges || []);
             setIsLoading(false);
             console.log('🔍 useGraphOperations: Load complete - React state should now have', graphData.nodes?.length || 0, 'nodes and', graphData.edges?.length || 0, 'edges');
+            
+            // Dispatch graph-loaded event to trigger auto-arrange
+            console.log('🔍 useGraphOperations: Dispatching graph-loaded event');
+            window.dispatchEvent(new CustomEvent('graph-loaded'));
           }, 200);
         }, 100);
         
@@ -113,6 +117,10 @@ export const useGraphOperations = (
               setTimeout(() => {
                 setEdges(graphData.edges || []);
                 setIsLoading(false);
+                
+                // Dispatch graph-loaded event to trigger auto-arrange
+                console.log('🔍 useGraphOperations: Dispatching graph-loaded event (cloud)');
+                window.dispatchEvent(new CustomEvent('graph-loaded'));
               }, 200);
             }, 100);
             
@@ -168,10 +176,41 @@ export const useGraphOperations = (
       setTimeout(() => {
         setEdges(graphData.edges || []);
         setIsLoading(false);
+        
+        // Dispatch graph-loaded event to trigger auto-arrange
+        console.log('🔍 useGraphOperations: Dispatching graph-loaded event (from data)');
+        window.dispatchEvent(new CustomEvent('graph-loaded'));
       }, 200);
     }, 100);
     
     return true;
+  };
+  
+  // Export to Excel
+  const exportToExcel = (graphName?: string): boolean => {
+    if (!nodes || nodes.length === 0) {
+      console.error('Cannot export to Excel: no nodes available');
+      return false;
+    }
+    
+    try {
+      // Dynamic import to avoid bundling xlsx in main bundle
+      import('@/utils/excelExport').then(({ exportToExcel: exportFn }) => {
+        exportFn(nodes, edges || [], graphName);
+        const fileName = graphName 
+          ? `${graphName.replace(/\s+/g, '_')}_${Date.now()}.xlsx`
+          : `graph_export_${Date.now()}.xlsx`;
+        // Toast will be shown by the calling component
+      }).catch(error => {
+        console.error('Error loading Excel export module:', error);
+        throw error;
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      return false;
+    }
   };
   
   return {
@@ -181,6 +220,7 @@ export const useGraphOperations = (
     getSavedGraphs,
     getCloudGraphs,
     exportGraph,
+    exportToExcel,
     importGraph,
     handleLoadGraphFromData,
     isLoading

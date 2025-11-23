@@ -43,6 +43,7 @@ interface FlowInstanceProps {
   onLoad: () => boolean;
   onDelete: (name: string) => boolean;
   onExport: () => string | null;
+  onExportToExcel?: () => boolean;
   onImport: (file: File) => void;
   getSavedGraphs: () => SavedGraph[];
   onLoadGraphFromStorage: (name: string) => boolean;
@@ -72,6 +73,7 @@ const FlowInstance: React.FC<FlowInstanceProps> = ({
   onLoad,
   onDelete,
   onExport,
+  onExportToExcel,
   onImport,
   getSavedGraphs,
   onLoadGraphFromStorage,
@@ -206,6 +208,7 @@ const FlowInstance: React.FC<FlowInstanceProps> = ({
         onLoad={onLoad}
         onDelete={onDelete}
         onExport={onExport}
+        onExportToExcel={onExportToExcel}
         onImport={onImport as any}
         getSavedGraphs={getSavedGraphs}
         onLoadGraphFromStorage={handleLoadGraphData}

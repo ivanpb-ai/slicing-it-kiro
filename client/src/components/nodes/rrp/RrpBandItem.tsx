@@ -43,7 +43,7 @@ export const RrpBandItem = memo(({
           />
         ) : (
           <div 
-            className="flex-1 cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center"
+            className="flex-1 cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center text-xl"
             onClick={() => onFieldEdit(index, 'name')}
           >
             {displayName}
@@ -53,7 +53,7 @@ export const RrpBandItem = memo(({
           onClick={() => onRemove(index)}
           className="ml-1 text-red-500 hover:text-red-700"
         >
-          <X className="h-3 w-3" />
+          <X className="h-4 w-4" />
         </button>
       </div>
       
@@ -68,12 +68,12 @@ export const RrpBandItem = memo(({
               value={editValue}
               onChange={onFieldChange}
               onBlur={onFieldBlur}
-              className="text-xs p-1 w-full border border-gray-300 rounded text-center"
+              className="text-xl p-1 w-full border border-gray-300 rounded text-center"
               autoFocus
             />
           ) : (
             <div 
-              className="cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center"
+              className="cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center text-xl"
               onClick={() => onFieldEdit(index, 'dl')}
             >
               {band.dl}%
@@ -91,12 +91,12 @@ export const RrpBandItem = memo(({
               value={editValue}
               onChange={onFieldChange}
               onBlur={onFieldBlur}
-              className="text-xs p-1 w-full border border-gray-300 rounded text-center"
+              className="text-xl p-1 w-full border border-gray-300 rounded text-center"
               autoFocus
             />
           ) : (
             <div 
-              className="cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center"
+              className="cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center text-xl"
               onClick={() => onFieldEdit(index, 'ul')}
             >
               {band.ul}%

@@ -24,7 +24,7 @@ export const RrpNameField = memo(({
         onChange={onChange}
         onBlur={onBlur}
         placeholder="Enter RRP name..."
-        className="text-sm font-semibold p-1 w-full border border-gray-300 rounded text-center mb-1"
+        className="text-xl font-semibold p-1 w-full border border-gray-300 rounded text-center mb-1"
         autoFocus
       />
     );
@@ -32,7 +32,7 @@ export const RrpNameField = memo(({
 
   return (
     <div 
-      className="text-sm font-semibold cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center mb-1"
+      className="text-xl font-semibold cursor-pointer hover:bg-gray-100/50 p-1 rounded text-center mb-1"
       onClick={onClick}
     >
       {name}

@@ -28,7 +28,7 @@ export const RrpPlmnField = memo(({
         onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
-        className="text-base p-3 w-full border border-gray-300 rounded text-center mt-1"
+        className="text-xl p-3 w-full border border-gray-300 rounded text-center mt-1"
         autoFocus
       />
     );
@@ -36,7 +36,7 @@ export const RrpPlmnField = memo(({
 
   return (
     <div 
-      className="flex items-center justify-center cursor-pointer hover:bg-gray-100/50 text-base p-3 rounded mt-1 border border-transparent"
+      className="flex items-center justify-center cursor-pointer hover:bg-gray-100/50 text-xl p-3 rounded mt-1 border border-transparent"
       onClick={(e) => {
         e.stopPropagation();
         onClick();

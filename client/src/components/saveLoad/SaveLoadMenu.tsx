@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Dialog } from '@/components/ui/dialog';
-import { SaveIcon, FolderOpenIcon, DownloadIcon, UploadIcon } from 'lucide-react';
+import { SaveIcon, FolderOpenIcon, DownloadIcon, UploadIcon, FileSpreadsheet } from 'lucide-react';
 import { useReactFlow } from '@xyflow/react';
 import MenuButton from './MenuButton';
 import StarIcon from './StarIcon';
@@ -16,6 +16,7 @@ type SaveLoadMenuProps = {
   onLoad: () => boolean;
   onDelete: (name: string) => boolean;
   onExport: () => string | null;
+  onExportToExcel?: () => boolean;
   onImport: (file: File) => void;
   getSavedGraphs: () => SavedGraph[];
   onLoadGraphFromStorage: (graphData: GraphData) => boolean;
@@ -26,6 +27,7 @@ const SaveLoadMenu: React.FC<SaveLoadMenuProps> = ({
   onLoad,
   onDelete,
   onExport,
+  onExportToExcel,
   onImport,
   getSavedGraphs,
   onLoadGraphFromStorage
@@ -80,8 +82,16 @@ const SaveLoadMenu: React.FC<SaveLoadMenuProps> = ({
       <MenuButton 
         icon={DownloadIcon} 
         onClick={() => onExport()}
-        title="Export Graph"
+        title="Export JSON"
       />
+      
+      {onExportToExcel && (
+        <MenuButton 
+          icon={FileSpreadsheet} 
+          onClick={() => onExportToExcel()}
+          title="Export Excel"
+        />
+      )}
       
       <MenuButton 
         icon={UploadIcon} 

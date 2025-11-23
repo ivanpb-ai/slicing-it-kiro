@@ -48,8 +48,8 @@ export const RrpBands = memo(({
         onClick={onAdd}
         className="flex items-center justify-center w-full mt-1 p-1.5 border border-dashed border-gray-300 rounded hover:bg-gray-50 cursor-pointer"
       >
-        <Plus className="h-3 w-3 mr-1" />
-        <span className="text-xs">Add Band</span>
+        <Plus className="h-4 w-4 mr-1" />
+        <span className="text-xl">Add Band</span>
       </button>
     </div>
   );

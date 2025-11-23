@@ -19,6 +19,7 @@ interface EditorPanelsProps {
   onLoad: () => boolean;
   onDelete: (name: string) => boolean;
   onExport: () => string | null;
+  onExportToExcel?: () => boolean;
   onImport: () => void;
   getSavedGraphs: () => SavedGraph[];
   onLoadGraphFromStorage: (graphData: GraphData) => boolean;
@@ -36,6 +37,7 @@ const EditorPanels: React.FC<EditorPanelsProps> = ({
   onLoad,
   onDelete,
   onExport,
+  onExportToExcel,
   onImport,
   getSavedGraphs,
   onLoadGraphFromStorage
@@ -60,6 +62,7 @@ const EditorPanels: React.FC<EditorPanelsProps> = ({
           onLoad={onLoad}
           onDelete={onDelete}
           onExport={onExport}
+          onExportToExcel={onExportToExcel}
           onImport={onImport}
           getSavedGraphs={getSavedGraphs}
           onLoadGraphFromStorage={onLoadGraphFromStorage}

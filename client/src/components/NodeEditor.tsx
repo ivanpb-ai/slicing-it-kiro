@@ -88,6 +88,40 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
     return null;
   }, [reactFlowInstance]);
 
+  const handleExportToExcel = useCallback((): boolean => {
+    console.log('🔍 NodeEditor: Excel export called');
+    
+    if (reactFlowInstance) {
+      const flowNodes = reactFlowInstance.getNodes();
+      const flowEdges = reactFlowInstance.getEdges();
+      
+      if (flowNodes.length === 0) {
+        toast.error('Cannot export: no nodes in graph');
+        return false;
+      }
+      
+      try {
+        // Dynamic import to avoid bundling xlsx in main bundle
+        import('@/utils/excelExport').then(({ exportToExcel }) => {
+          exportToExcel(flowNodes, flowEdges);
+          toast.success(`Graph exported to Excel with ${flowNodes.length} nodes`);
+        }).catch(error => {
+          console.error('Error loading Excel export module:', error);
+          toast.error('Failed to export to Excel');
+        });
+        
+        return true;
+      } catch (error) {
+        console.error('Error exporting to Excel:', error);
+        toast.error('Failed to export to Excel');
+        return false;
+      }
+    }
+    
+    toast.error('Cannot export: ReactFlow instance not available');
+    return false;
+  }, [reactFlowInstance]);
+
   const {
     nodes: hookNodes,
     edges: hookEdges,
@@ -236,6 +270,26 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
     arrangeNodesInLayout
   );
   
+  // Auto-arrange when graph is loaded or imported
+  useEffect(() => {
+    const handleGraphLoaded = () => {
+      console.log('📐 NodeEditor: Graph loaded event received, triggering auto-arrange');
+      // Add a delay to ensure nodes are fully rendered before arranging
+      setTimeout(() => {
+        if (arrangeNodesInLayout) {
+          console.log('📐 NodeEditor: Executing auto-arrange');
+          arrangeNodesInLayout();
+          toast.success('Graph arranged automatically');
+        }
+      }, 600); // Wait for nodes to be rendered
+    };
+    
+    window.addEventListener('graph-loaded', handleGraphLoaded);
+    
+    return () => {
+      window.removeEventListener('graph-loaded', handleGraphLoaded);
+    };
+  }, [arrangeNodesInLayout]);
 
   // Use the proper drag and drop handler
   const { onDragOver, onDrop } = useNodeDragDrop(
@@ -533,6 +587,7 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
           onLoad={handleLoadGraph}
           onDelete={deleteGraph}
           onExport={directExportGraph}
+          onExportToExcel={handleExportToExcel}
           onImport={handleImportGraph}
           getSavedGraphs={getSavedGraphs}
           onLoadGraphFromStorage={handleLoadGraphFromStorage}
