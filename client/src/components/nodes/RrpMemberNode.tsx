@@ -10,10 +10,10 @@ interface RrpMemberNodeProps {
 
 const RrpMemberNode = memo(({ data }: RrpMemberNodeProps) => {
   return (
-    <div className="text-lg text-gray-900 text-center">
+    <div className="text-xl text-gray-900 text-center">
       {/* Header */}
       <div className="w-full bg-teal-300 border-b border-teal-400 px-4 py-3 mb-4 rounded-t">
-        <div className="text-lg font-bold text-white text-center">RRP Member</div>
+        <div className="text-xl font-bold text-white text-center">RRP Member</div>
       </div>
     
       {/* Input handle at the top */}
@@ -25,7 +25,7 @@ const RrpMemberNode = memo(({ data }: RrpMemberNodeProps) => {
         style={{ top: -8 }}
         isConnectable={true}
       />
-      <div className="text-lg font-semibold text-gray-900">
+      <div className="text-xl font-semibold text-gray-900">
         PLMN: {data.plmnValue || 'Unknown'}
       </div>
       {/* Output handle at the bottom */}
@@ -44,3 +44,4 @@ const RrpMemberNode = memo(({ data }: RrpMemberNodeProps) => {
 RrpMemberNode.displayName = 'RrpMemberNode';
 
 export default RrpMemberNode;
+

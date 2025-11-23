@@ -72,16 +72,16 @@ export const RrpNode = memo(({ id, data }: RrpNodeProps) => {
 
       {/* Header */}
       <div className="w-full bg-green-300 border-b border-green-400 px-4 py-3 mb-4 rounded-t">
-        <div className="text-lg font-bold text-white text-center">
+        <div className="text-xl font-bold text-white text-center">
           RRP#{data.rrpId}
         </div>
       </div>
 
       {/* RRP Name */}
-      <div className="w-full text-center text-lg mb-4">
+      <div className="w-full text-center text-xl mb-4">
         {isEditingName ? (
           <input
-            className="text-lg p-3 w-full border border-gray-300 rounded text-center"
+            className="text-xl p-3 w-full border border-gray-300 rounded text-center"
             value={rrpName}
             onChange={handleNameChange}
             onBlur={handleNameBlur}
@@ -144,4 +144,5 @@ export const RrpNode = memo(({ id, data }: RrpNodeProps) => {
 });
 
 export default RrpNode;
+
 

@@ -10,3 +10,4 @@ const CustomNode = memo(({ id, data }: NodeProps) => {
 CustomNode.displayName = "CustomNode";
 export default CustomNode;
 
+

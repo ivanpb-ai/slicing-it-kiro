@@ -105,7 +105,7 @@ const CellAreaNode = memo(({ data }: CellAreaNodeProps) => {
 
       {/* Header - Shows "Cell Area #" with the cellAreaId */}
       <div className="w-full bg-blue-300 border-b border-blue-400 px-4 py-3 mb-4 rounded-t">
-        <div className="text-lg font-bold text-white text-center">Cell Area #{displayId}</div>
+        <div className="text-xl font-bold text-white text-center">Cell Area #{displayId}</div>
       </div>
 
       {isEditingDescription ? (
@@ -115,12 +115,12 @@ const CellAreaNode = memo(({ data }: CellAreaNodeProps) => {
           onChange={handleDescriptionChange}
           onBlur={handleDescriptionBlur}
           placeholder="Add description..."
-          className="text-lg p-1 w-full border border-gray-300 rounded bg-white"
+          className="text-xl p-1 w-full border border-gray-300 rounded bg-white"
           autoFocus
         />
       ) : (
         <div 
-          className="text-lg text-center cursor-pointer hover:bg-blue-100 p-1 rounded cell-area-description"
+          className="text-xl text-center cursor-pointer hover:bg-blue-100 p-1 rounded cell-area-description"
           onClick={handleDescriptionClick}
         >
           {cellDescription}
@@ -140,4 +140,5 @@ const CellAreaNode = memo(({ data }: CellAreaNodeProps) => {
 });
 
 export default CellAreaNode;
+
 

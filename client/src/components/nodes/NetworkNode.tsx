@@ -54,14 +54,14 @@ const NetworkNode = memo(({ data }: NetworkNodeProps) => {
 
       {/* Header */}
       <div className="w-full bg-indigo-300 border-b border-indigo-400 px-4 py-3 mb-4 rounded-t">
-        <div className="text-lg font-bold text-white text-center">Network</div>
+        <div className="text-xl font-bold text-white text-center">Network</div>
       </div>
       
       {data.description && (
-        <div className="text-lg text-gray-900 mt-3 text-center">{data.description}</div>
+        <div className="text-xl text-gray-900 mt-3 text-center">{data.description}</div>
       )}
       
-      <div className="text-center text-lg mt-4 text-blue-600">Main entry point</div>
+      <div className="text-center text-xl mt-4 text-blue-600">Main entry point</div>
     </div>
   </div>
 
@@ -71,4 +71,5 @@ const NetworkNode = memo(({ data }: NetworkNodeProps) => {
 NetworkNode.displayName = 'NetworkNode';
 
 export default NetworkNode;
+
 

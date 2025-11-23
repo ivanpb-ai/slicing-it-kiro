@@ -76,16 +76,16 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   // If we still don't have values, show error state
   if (!displayValues) {
     return (
-      <div className="text-lg text-gray-900 mt-1 text-center">
+      <div className="text-xl text-gray-900 mt-1 text-center">
         {/* Header */}
         <div className="w-full bg-purple-300 border-b border-purple-400 px-4 py-3 mb-4 rounded-t">
-          <div className="text-lg font-bold text-white text-center">5QI</div>
+          <div className="text-xl font-bold text-white text-center">5QI</div>
         </div>
         
         <Badge className="bg-red-600 text-white hover:bg-red-700 mb-4 px-5 py-2 text-xl font-bold rounded-full">
           Invalid 5QI: {fiveQIId || "Unknown"}
         </Badge>
-        <div className="mt-4 text-lg font-semibold text-gray-900">
+        <div className="mt-4 text-xl font-semibold text-gray-900">
           Could not load QoS values
         </div>
       </div>
@@ -108,11 +108,11 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         isConnectable={true}
       />
 
-      <div className="text-lg text-gray-900 mt-3 text-center">
+      <div className="text-xl text-gray-900 mt-3 text-center">
 
       {/* Header */}
       <div className="w-full bg-purple-300 border-b border-purple-400 px-4 py-3 mb-4 rounded-t">
-        <div className="text-lg font-bold text-white text-center">5QI</div>
+        <div className="text-xl font-bold text-white text-center">5QI</div>
       </div>
 
 
@@ -122,12 +122,12 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       </Badge>
       
       {/* Display QoS service/description */}
-      <div className="mt-4 text-lg font-semibold text-gray-900">
+      <div className="mt-4 text-xl font-semibold text-gray-900">
         {displayValues.service}
       </div>
       
       {/* Display QoS parameters in a more visible format */}
-      <div className="mt-4 text-lg bg-white/70 p-3 rounded shadow-sm">
+      <div className="mt-4 text-xl bg-white/70 p-3 rounded shadow-sm">
         <div className="grid grid-cols-2 gap-x-2 gap-y-1.5">
           <span className="font-semibold text-gray-900">Type:</span>
           <span className="text-gray-900">{displayValues.resourceType}</span>
@@ -148,4 +148,5 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
 });
 
 export default FiveQiNode;
+
 

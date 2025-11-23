@@ -61,33 +61,33 @@ const SnssaiNode = memo(({ data }: SnssaiNodeProps) => {
       
       {/* Header */}
       <div className="w-full bg-violet-300 border-b border-violet-400 px-4 py-3 mb-4 rounded-t">
-        <div className="text-lg font-bold text-white text-center">S-NSSAI#{displayId}</div>
+        <div className="text-xl font-bold text-white text-center">S-NSSAI#{displayId}</div>
       </div>
       
       {data.description && (
-        <div className="text-lg text-gray-900 mt-3 text-center">{data.description}</div>
+        <div className="text-xl text-gray-900 mt-3 text-center">{data.description}</div>
       )}
       
       <div className="mt-4 mb-3 w-full space-y-2">
         <div className="flex flex-col">
-          <label className="text-lg text-gray-900 mb-3 font-semibold">SD:</label>
+          <label className="text-xl text-gray-900 mb-3 font-semibold">SD:</label>
           <input
             type="text"
             value={sd}
             onChange={handleSdChange}
             placeholder="Service Differentiator"
-            className="text-lg p-1 w-full border border-gray-300 rounded"
+            className="text-xl p-1 w-full border border-gray-300 rounded"
           />
         </div>
         
         <div className="flex flex-col">
-          <label className="text-lg text-gray-900 mb-3 font-semibold">SST:</label>
+          <label className="text-xl text-gray-900 mb-3 font-semibold">SST:</label>
           <input
             type="text"
             value={sst}
             onChange={handleSstChange}
             placeholder="Slice/Service Type"
-            className="text-lg p-1 w-full border border-gray-300 rounded"
+            className="text-xl p-1 w-full border border-gray-300 rounded"
           />
         </div>
       </div>
@@ -106,4 +106,5 @@ const SnssaiNode = memo(({ data }: SnssaiNodeProps) => {
 });
 
 export default SnssaiNode;
+
 
