@@ -58,10 +58,10 @@ const NetworkNode = memo(({ data }: NetworkNodeProps) => {
       </div>
       
       {data.description && (
-        <div className="text-base text-gray-900 mt-3 text-center">{data.description}</div>
+        <div className="text-lg text-gray-900 mt-3 text-center">{data.description}</div>
       )}
       
-      <div className="text-center text-base mt-4 text-blue-600">Main entry point</div>
+      <div className="text-center text-lg mt-4 text-blue-600">Main entry point</div>
     </div>
   </div>
 
@@ -71,3 +71,4 @@ const NetworkNode = memo(({ data }: NetworkNodeProps) => {
 NetworkNode.displayName = 'NetworkNode';
 
 export default NetworkNode;
+

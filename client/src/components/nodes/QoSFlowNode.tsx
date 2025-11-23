@@ -58,26 +58,26 @@ const QoSFlowNode = memo(({ id, data }: QoSFlowNodeProps) => {
         isConnectable={true}
       />
 
-      <div className="text-base text-gray-900 mt-3 text-center">
+      <div className="text-lg text-gray-900 mt-3 text-center">
         {/* Header */}
         <div className="w-full bg-cyan-300 border-b border-cyan-400 px-4 py-3 mb-4 rounded-t">
           <div className="text-lg font-bold text-white text-center">QoS Flow</div>
         </div>
 
         {/* Display QoS Flow ID badge */}
-        <Badge className="bg-cyan-500 text-white hover:bg-cyan-600 mb-4 px-4 py-2 text-base font-semibold rounded-full">
+        <Badge className="bg-cyan-500 text-white hover:bg-cyan-600 mb-4 px-4 py-2 text-lg font-semibold rounded-full">
           QoS Flow: {qosFlowId}
         </Badge>
         
         {/* Editable name field */}
         <div className="mt-4 mb-3">
-          <label className="text-base font-semibold text-gray-900 block mb-1">Name</label>
+          <label className="text-lg font-semibold text-gray-900 block mb-1">Name</label>
           <input
             type="text"
             value={qosFlowName}
             onChange={(e) => handleNameChange(e.target.value)}
             placeholder="Enter QoS Flow name"
-            className="w-full px-2 py-1 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            className="w-full px-2 py-1 text-lg border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
           />
         </div>
         
@@ -90,7 +90,7 @@ const QoSFlowNode = memo(({ id, data }: QoSFlowNodeProps) => {
               onChange={(e) => handleDefaultChange(e.target.checked)}
               className="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 rounded focus:ring-cyan-500 focus:ring-2"
             />
-            <span className="text-base font-semibold text-gray-900">Default</span>
+            <span className="text-lg font-semibold text-gray-900">Default</span>
           </label>
         </div>
       </div>

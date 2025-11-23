@@ -81,7 +81,7 @@ export const RrpNode = memo(({ id, data }: RrpNodeProps) => {
       <div className="w-full text-center text-lg mb-4">
         {isEditingName ? (
           <input
-            className="text-base p-3 w-full border border-gray-300 rounded text-center"
+            className="text-lg p-3 w-full border border-gray-300 rounded text-center"
             value={rrpName}
             onChange={handleNameChange}
             onBlur={handleNameBlur}
@@ -144,3 +144,4 @@ export const RrpNode = memo(({ id, data }: RrpNodeProps) => {
 });
 
 export default RrpNode;
+

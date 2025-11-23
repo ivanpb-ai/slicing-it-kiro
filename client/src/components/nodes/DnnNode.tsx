@@ -80,7 +80,7 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
       </div>
       
       {data.description && (
-        <div className="text-base text-gray-900 mt-3 text-center">{data.description}</div>
+        <div className="text-lg text-gray-900 mt-3 text-center">{data.description}</div>
       )}
       <div className="mt-4 mb-3 w-full">
         {isEditing ? (
@@ -90,22 +90,22 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
             onChange={handleCustomNameChange}
             onBlur={handleBlur}
             placeholder="Add custom name..."
-            className="text-base p-1 w-full border border-gray-300 rounded"
+            className="text-lg p-1 w-full border border-gray-300 rounded"
             autoFocus
           />
         ) : (
           <div 
-            className="text-base text-gray-900 text-center cursor-pointer hover:bg-gray-100/50 p-1 rounded"
+            className="text-lg text-gray-900 text-center cursor-pointer hover:bg-gray-100/50 p-1 rounded"
             onClick={handleClick}
           >
             {customName ? customName : "Click to add custom name..."}
           </div>
         )}
       </div>
-      <div className="text-base text-center text-gray-800 mt-3">
+      <div className="text-lg text-center text-gray-800 mt-3">
         Connect top handle to multiple S-NSSAI bottom handles
       </div>
-      <div className="text-base text-center text-gray-800 mt-3 font-semibold">
+      <div className="text-lg text-center text-gray-800 mt-3 font-semibold">
         Drag QoS Flow nodes onto this DNN to connect them
       </div>
 
@@ -124,3 +124,4 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
 });
 
 export default DnnNode;
+

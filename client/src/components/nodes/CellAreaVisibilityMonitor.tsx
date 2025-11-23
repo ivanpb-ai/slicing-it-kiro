@@ -30,3 +30,4 @@ const CellAreaVisibilityMonitor = () => {
 };
 
 export default CellAreaVisibilityMonitor;
+

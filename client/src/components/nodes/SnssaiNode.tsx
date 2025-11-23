@@ -65,29 +65,29 @@ const SnssaiNode = memo(({ data }: SnssaiNodeProps) => {
       </div>
       
       {data.description && (
-        <div className="text-base text-gray-900 mt-3 text-center">{data.description}</div>
+        <div className="text-lg text-gray-900 mt-3 text-center">{data.description}</div>
       )}
       
       <div className="mt-4 mb-3 w-full space-y-2">
         <div className="flex flex-col">
-          <label className="text-base text-gray-900 mb-3 font-semibold">SD:</label>
+          <label className="text-lg text-gray-900 mb-3 font-semibold">SD:</label>
           <input
             type="text"
             value={sd}
             onChange={handleSdChange}
             placeholder="Service Differentiator"
-            className="text-base p-1 w-full border border-gray-300 rounded"
+            className="text-lg p-1 w-full border border-gray-300 rounded"
           />
         </div>
         
         <div className="flex flex-col">
-          <label className="text-base text-gray-900 mb-3 font-semibold">SST:</label>
+          <label className="text-lg text-gray-900 mb-3 font-semibold">SST:</label>
           <input
             type="text"
             value={sst}
             onChange={handleSstChange}
             placeholder="Slice/Service Type"
-            className="text-base p-1 w-full border border-gray-300 rounded"
+            className="text-lg p-1 w-full border border-gray-300 rounded"
           />
         </div>
       </div>
@@ -106,3 +106,4 @@ const SnssaiNode = memo(({ data }: SnssaiNodeProps) => {
 });
 
 export default SnssaiNode;
+
