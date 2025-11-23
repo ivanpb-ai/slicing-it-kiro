@@ -38,7 +38,7 @@ export const RrpBandItem = memo(({
             onChange={onFieldChange}
             onBlur={onFieldBlur}
             placeholder="Band name..."
-            className="text-xs p-1 flex-1 border border-gray-300 rounded text-center"
+            className="text-xl p-1 flex-1 border border-gray-300 rounded text-center"
             autoFocus
           />
         ) : (
@@ -59,7 +59,7 @@ export const RrpBandItem = memo(({
       
       <div className="grid grid-cols-2 gap-1.5">
         <div>
-          <div className="text-xs text-gray-500 mb-0.5">DL %</div>
+          <div className="text-xl text-gray-500 mb-0.5">DL %</div>
           {editingBandIndex === index && editingField === 'dl' ? (
             <input
               type="number"
@@ -82,7 +82,7 @@ export const RrpBandItem = memo(({
         </div>
         
         <div>
-          <div className="text-xs text-gray-500 mb-0.5">UL %</div>
+          <div className="text-xl text-gray-500 mb-0.5">UL %</div>
           {editingBandIndex === index && editingField === 'ul' ? (
             <input
               type="number"
