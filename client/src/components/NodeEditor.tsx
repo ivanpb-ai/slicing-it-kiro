@@ -457,6 +457,10 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
           // The nodes are already loaded via React state, no manual refresh needed
         }, 100);
         
+        // Dispatch graph-loaded event to trigger auto-arrange
+        console.log('📐 NodeEditor: Dispatching graph-loaded event after load');
+        window.dispatchEvent(new CustomEvent('graph-loaded'));
+        
         // Show toast with proper styling
         toast.success(`Graph "${name}" loaded successfully with ${processedNodes.length} nodes and ${processedEdges.length} edges`, {
           style: {
