@@ -1,6 +1,6 @@
 
 import { useState, useCallback, memo, useRef, useEffect } from "react";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { NodeData } from "../../types/nodeTypes";
 import { useNodeEditorContext } from "../../contexts/NodeEditorContext";
 
@@ -10,8 +10,10 @@ interface DnnNodeProps {
 
 const DnnNode = memo(({ data }: DnnNodeProps) => {
   const { updateNodeData } = useNodeEditorContext();
+  const reactFlowInstance = useReactFlow();
   const [isEditing, setIsEditing] = useState(false);
   const [customName, setCustomName] = useState(data.dnnCustomName || '');
+  const [isActive, setIsActive] = useState(data.dnnActive !== undefined ? data.dnnActive : true);
   
   // Use a ref to store the previous custom name to avoid unnecessary updates
   const prevCustomNameRef = useRef(data.dnnCustomName);
@@ -41,7 +43,11 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
       console.log('DNN: Force syncing customName to:', data.dnnCustomName);
       setCustomName(data.dnnCustomName);
     }
-  }, [data]);
+    // Sync isActive state
+    if (data.dnnActive !== undefined && data.dnnActive !== isActive) {
+      setIsActive(data.dnnActive);
+    }
+  }, [data, customName, isActive]);
 
   const handleCustomNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -50,6 +56,63 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
     // Use updateNodeData to properly persist the change
     updateNodeData(data.nodeId || '', { ...data, dnnCustomName: newValue });
   }, [data, updateNodeData]);
+
+  const animateFlowPath = useCallback((nodeId: string, shouldAnimate: boolean) => {
+    if (!reactFlowInstance) return;
+    
+    const edges = reactFlowInstance.getEdges();
+    const nodes = reactFlowInstance.getNodes();
+    
+    // Find all edges in the path from 5QI nodes up to the network
+    const pathEdges = new Set<string>();
+    const nodesToProcess = [nodeId];
+    const processedNodes = new Set<string>();
+    
+    // Traverse up the hierarchy
+    while (nodesToProcess.length > 0) {
+      const currentNodeId = nodesToProcess.shift()!;
+      if (processedNodes.has(currentNodeId)) continue;
+      processedNodes.add(currentNodeId);
+      
+      // Find edges connected to this node (both incoming and outgoing)
+      const connectedEdges = edges.filter(edge => 
+        edge.source === currentNodeId || edge.target === currentNodeId
+      );
+      
+      connectedEdges.forEach(edge => {
+        pathEdges.add(edge.id);
+        // Add connected nodes to process
+        if (edge.source !== currentNodeId) nodesToProcess.push(edge.source);
+        if (edge.target !== currentNodeId) nodesToProcess.push(edge.target);
+      });
+    }
+    
+    // Update edges with animation
+    const updatedEdges = edges.map(edge => ({
+      ...edge,
+      animated: pathEdges.has(edge.id) && shouldAnimate,
+      style: {
+        ...edge.style,
+        stroke: pathEdges.has(edge.id) && shouldAnimate ? '#10b981' : '#2563eb',
+        strokeWidth: pathEdges.has(edge.id) && shouldAnimate ? 4 : 3,
+      }
+    }));
+    
+    reactFlowInstance.setEdges(updatedEdges);
+    
+    console.log(`DNN Flow Animation: ${shouldAnimate ? 'Activated' : 'Deactivated'} for ${pathEdges.size} edges`);
+  }, [reactFlowInstance]);
+
+  const handleActiveChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.checked;
+    setIsActive(newValue);
+    
+    // Trigger flow animation
+    animateFlowPath(data.nodeId || '', newValue);
+    
+    // Use updateNodeData to properly persist the change
+    updateNodeData(data.nodeId || '', { ...data, dnnActive: newValue });
+  }, [data, updateNodeData, animateFlowPath]);
 
   const handleBlur = useCallback(() => {
     setIsEditing(false);
@@ -109,6 +172,22 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
         Drag QoS Flow nodes onto this DNN to connect them
       </div>
 
+      {/* Activate checkbox */}
+      <div className="mt-4 flex items-center justify-center gap-2">
+        <input
+          type="checkbox"
+          id={`dnn-active-${data.nodeId}`}
+          checked={isActive}
+          onChange={handleActiveChange}
+          className="w-5 h-5 cursor-pointer"
+        />
+        <label 
+          htmlFor={`dnn-active-${data.nodeId}`}
+          className="text-lg font-medium text-gray-700 cursor-pointer select-none"
+        >
+          Activate
+        </label>
+      </div>
       
       {/* Output handle at the bottom */}
       <Handle

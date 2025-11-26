@@ -216,7 +216,10 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
   }, [nodes.length, setNodes, setEdges, reactFlowInstance]);
 
   const handleInitializeCanvas = useCallback(() => {
-    if (nodes.length > 0) {
+    // Get current nodes from ReactFlow instance for accurate count
+    const currentNodes = reactFlowInstance?.getNodes() || nodes;
+    
+    if (currentNodes.length > 0) {
       const proceed = window.confirm('Canvas already has nodes. Clear it first and add example data?');
       if (!proceed) return;
     }
@@ -237,6 +240,9 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
         reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 1 });
       }
       
+      // Dispatch canvas-cleared event
+      window.dispatchEvent(new CustomEvent('canvas-cleared'));
+      
       // Set nodes using React state - ReactFlow will automatically sync
       setTimeout(() => {
         setNodes(EXAMPLE_GRAPH.nodes);
@@ -244,11 +250,16 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
           // Use React state for edges - ReactFlow will automatically sync
           setEdges(EXAMPLE_GRAPH.edges);
           
-          // Fit view after loading
+          // Fit view and dispatch event after loading
           setTimeout(() => {
             if (reactFlowInstance) {
               reactFlowInstance.fitView({ padding: 0.2 });
             }
+            
+            // Dispatch graph-loaded event to trigger auto-arrange
+            console.log('📐 NodeEditor: Dispatching graph-loaded event after example graph load');
+            window.dispatchEvent(new CustomEvent('graph-loaded'));
+            
             toast.success(`Example graph loaded with ${EXAMPLE_GRAPH.nodes.length} nodes and ${EXAMPLE_GRAPH.edges.length} edges`);
           }, 200);
         }, 100);
@@ -258,7 +269,7 @@ const NodeEditorContent: React.FC<NodeEditorProps> = ({
       console.error('NodeEditor: Error loading example graph:', error);
       toast.error('Failed to load example graph');
     }
-  }, [nodes.length, setNodes, setEdges, reactFlowInstance]);
+  }, [nodes, setNodes, setEdges, reactFlowInstance]);
 
   // Add layout management - use hookNodes for accurate state
   const { arrangeNodesInLayout } = useNodeLayoutManager(hookNodes, hookEdges, hookSetNodes, hookSetEdges);
