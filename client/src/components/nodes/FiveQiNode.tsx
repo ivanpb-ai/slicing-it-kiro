@@ -91,14 +91,14 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         }
       }
       
-      // Find outgoing edge (going up the hierarchy)
-      const outgoingEdge = edges.find(edge => edge.source === currentNodeId);
-      if (outgoingEdge) {
-        pathToNetwork.push(outgoingEdge.id);
-        console.log('5QI Pulsating Animation: Added edge to path:', outgoingEdge.id);
-        currentNodeId = outgoingEdge.target;
+      // Find incoming edge (going up the hierarchy from 5QI to Network)
+      const incomingEdge = edges.find(edge => edge.target === currentNodeId);
+      if (incomingEdge) {
+        pathToNetwork.push(incomingEdge.id);
+        console.log('5QI Pulsating Animation: Added edge to path:', incomingEdge.id);
+        currentNodeId = incomingEdge.source;
       } else {
-        console.log('5QI Pulsating Animation: No outgoing edge found for node:', currentNodeId);
+        console.log('5QI Pulsating Animation: No incoming edge found for node:', currentNodeId);
         break;
       }
     }
