@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, memo } from "react";
+import { useEffect, useState, useRef, memo, useCallback } from "react";
 import { NodeData } from "../../types/nodeTypes";
 import { Badge } from "../../components/ui/badge";
 import { getFiveQIValueById } from "../../utils/flowData/utils/fiveQIUtils";
@@ -14,7 +14,7 @@ interface FiveQiNodeProps {
 const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   // Use state to track the actual QoS values we should display
   const [qosValues, setQosValues] = useState(data.qosValues);
-  
+  const [isDefault, setIsDefault] = useState(data.fiveQiDefault !== undefined ? data.fiveQiDefault : false);
   
   // Use ref to track previous fiveQIId to prevent unnecessary updates
   const previousFiveQIIdRef = useRef(data.fiveQIId);
@@ -27,6 +27,22 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   
   console.log("5QI Node rendering with data:", data);
   console.log("5QI Node fiveQIId:", fiveQIId);
+
+  // Handle default checkbox change
+  const handleDefaultChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.checked;
+    setIsDefault(newValue);
+    
+    // Use updateNodeData to properly persist the change
+    updateNodeData(data.nodeId || '', { ...data, fiveQiDefault: newValue });
+  }, [data, updateNodeData]);
+
+  // Sync isDefault state with data changes
+  useEffect(() => {
+    if (data.fiveQiDefault !== undefined && data.fiveQiDefault !== isDefault) {
+      setIsDefault(data.fiveQiDefault);
+    }
+  }, [data.fiveQiDefault, isDefault]);
   
   // Use effect to load QoS values if we have a fiveQIId
   useEffect(() => {
@@ -138,6 +154,23 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
           <span className="font-semibold text-gray-900">Delay:</span>
           <span className="text-gray-900">{displayValues.packetDelay}</span>
         </div>
+      </div>
+
+      {/* Default checkbox */}
+      <div className="mt-4 flex items-center justify-center gap-2">
+        <input
+          type="checkbox"
+          id={`fiveqi-default-${data.nodeId}`}
+          checked={isDefault}
+          onChange={handleDefaultChange}
+          className="w-5 h-5 cursor-pointer"
+        />
+        <label 
+          htmlFor={`fiveqi-default-${data.nodeId}`}
+          className="text-lg font-medium text-gray-700 cursor-pointer select-none"
+        >
+          Default
+        </label>
       </div>
       
 
