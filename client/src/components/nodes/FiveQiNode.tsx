@@ -31,15 +31,33 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
 
   // Function to check if parent DNN is activated and trigger pulsating animation
   const checkAndTriggerPulsatingAnimation = useCallback(() => {
-    if (!reactFlowInstance || !isDefault) return;
+    console.log('5QI Pulsating Animation: Function called', { 
+      hasReactFlow: !!reactFlowInstance, 
+      isDefault, 
+      nodeId: data.nodeId 
+    });
+    
+    if (!reactFlowInstance || !isDefault) {
+      console.log('5QI Pulsating Animation: Early return - missing reactFlow or not default');
+      return;
+    }
     
     const edges = reactFlowInstance.getEdges();
     const nodes = reactFlowInstance.getNodes();
+    
+    console.log('5QI Pulsating Animation: Graph state', { 
+      totalEdges: edges.length, 
+      totalNodes: nodes.length 
+    });
     
     // Find the path from this 5QI node up to the network node
     const pathToNetwork = [];
     let currentNodeId = data.nodeId || '';
     const visitedNodes = new Set();
+    let dnnFound = false;
+    let dnnActivated = false;
+    
+    console.log('5QI Pulsating Animation: Starting traversal from node:', currentNodeId);
     
     // Traverse up the hierarchy: 5QI -> QoS Flow -> DNN -> S-NSSAI -> Network
     while (currentNodeId && !visitedNodes.has(currentNodeId)) {
@@ -47,25 +65,59 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       
       // Find the current node
       const currentNode = nodes.find(n => n.id === currentNodeId);
-      if (!currentNode) break;
+      if (!currentNode) {
+        console.log('5QI Pulsating Animation: Node not found:', currentNodeId);
+        break;
+      }
+      
+      console.log('5QI Pulsating Animation: Processing node:', {
+        id: currentNode.id,
+        type: currentNode.data?.type,
+        dnnActive: currentNode.data?.dnnActive
+      });
       
       // If this is a DNN node, check if it's activated
-      if (currentNode.data?.type === 'dnn' && !currentNode.data?.dnnActive) {
-        console.log('5QI Pulsating Animation: Parent DNN not activated, skipping animation');
-        return; // DNN not activated, don't animate
+      if (currentNode.data?.type === 'dnn') {
+        dnnFound = true;
+        dnnActivated = currentNode.data?.dnnActive === true;
+        console.log('5QI Pulsating Animation: Found DNN node', {
+          id: currentNode.id,
+          activated: dnnActivated
+        });
+        
+        if (!dnnActivated) {
+          console.log('5QI Pulsating Animation: Parent DNN not activated, skipping animation');
+          return; // DNN not activated, don't animate
+        }
       }
       
       // Find outgoing edge (going up the hierarchy)
       const outgoingEdge = edges.find(edge => edge.source === currentNodeId);
       if (outgoingEdge) {
         pathToNetwork.push(outgoingEdge.id);
+        console.log('5QI Pulsating Animation: Added edge to path:', outgoingEdge.id);
         currentNodeId = outgoingEdge.target;
       } else {
+        console.log('5QI Pulsating Animation: No outgoing edge found for node:', currentNodeId);
         break;
       }
     }
     
-    if (pathToNetwork.length === 0) return;
+    console.log('5QI Pulsating Animation: Path analysis', {
+      pathLength: pathToNetwork.length,
+      dnnFound,
+      dnnActivated,
+      pathEdges: pathToNetwork
+    });
+    
+    if (pathToNetwork.length === 0) {
+      console.log('5QI Pulsating Animation: No path found, returning');
+      return;
+    }
+    
+    if (!dnnFound) {
+      console.log('5QI Pulsating Animation: No DNN found in path, continuing anyway');
+    }
     
     // Create pulsating animation effect
     const animateEdgesPulsating = (edgeIds: string[], shouldPulse: boolean) => {
@@ -111,6 +163,7 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
     if (!document.querySelector('#pulsating-animation-styles')) {
       style.id = 'pulsating-animation-styles';
       document.head.appendChild(style);
+      console.log('5QI Pulsating Animation: Added CSS styles');
     }
     
   }, [reactFlowInstance, isDefault, data.nodeId]);
