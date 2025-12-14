@@ -119,26 +119,56 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       console.log('5QI Pulsating Animation: No DNN found in path, continuing anyway');
     }
     
-    // Create pulsating animation effect
+    // Create pulsating animation effect with more aggressive styling
     const animateEdgesPulsating = (edgeIds: string[], shouldPulse: boolean) => {
+      console.log('5QI Pulsating Animation: Updating edges', { edgeIds, shouldPulse });
+      
       const updatedEdges = edges.map(edge => {
         if (edgeIds.includes(edge.id)) {
-          return {
+          const newEdge = {
             ...edge,
             animated: shouldPulse,
             style: {
-              ...edge.style,
               stroke: shouldPulse ? '#f59e0b' : '#2563eb', // Orange for pulsating, blue for normal
-              strokeWidth: shouldPulse ? 5 : 3,
-              strokeDasharray: shouldPulse ? '10,5' : undefined,
+              strokeWidth: shouldPulse ? 6 : 3,
+              strokeDasharray: shouldPulse ? '15,10' : undefined,
+              opacity: shouldPulse ? 0.9 : 1,
             },
-            className: shouldPulse ? 'pulsating-edge' : undefined,
+            className: shouldPulse ? 'pulsating-edge' : '',
+            data: {
+              ...edge.data,
+              isPulsating: shouldPulse
+            }
           };
+          console.log('5QI Pulsating Animation: Updated edge', { 
+            id: edge.id, 
+            newStyle: newEdge.style,
+            animated: newEdge.animated 
+          });
+          return newEdge;
         }
         return edge;
       });
       
+      // Force ReactFlow to update
       reactFlowInstance.setEdges(updatedEdges);
+      
+      // Also try direct DOM manipulation as backup
+      setTimeout(() => {
+        edgeIds.forEach(edgeId => {
+          const edgeElement = document.querySelector(`[data-id="${edgeId}"]`);
+          if (edgeElement) {
+            const pathElement = edgeElement.querySelector('path');
+            if (pathElement && shouldPulse) {
+              pathElement.style.stroke = '#f59e0b';
+              pathElement.style.strokeWidth = '6px';
+              pathElement.style.strokeDasharray = '15,10';
+              pathElement.style.animation = 'pulse-flow 2s ease-in-out infinite';
+              console.log('5QI Pulsating Animation: Applied direct DOM styling to', edgeId);
+            }
+          }
+        });
+      }, 100);
     };
     
     // Start pulsating animation
@@ -146,25 +176,60 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
     
     console.log(`5QI Pulsating Animation: Started for ${pathToNetwork.length} edges from 5QI to network`);
     
-    // Add CSS for pulsating effect
+    // Add enhanced CSS for pulsating effect
     const style = document.createElement('style');
     style.textContent = `
-      .pulsating-edge {
-        animation: pulse-flow 2s ease-in-out infinite;
+      .pulsating-edge path {
+        animation: pulse-flow 2s ease-in-out infinite !important;
+        stroke: #f59e0b !important;
+        stroke-width: 6px !important;
+        stroke-dasharray: 15,10 !important;
       }
       
       @keyframes pulse-flow {
-        0% { opacity: 0.6; stroke-width: 3px; }
-        50% { opacity: 1; stroke-width: 6px; }
-        100% { opacity: 0.6; stroke-width: 3px; }
+        0% { 
+          opacity: 0.7; 
+          stroke-width: 4px !important;
+          stroke: #f59e0b !important;
+        }
+        50% { 
+          opacity: 1; 
+          stroke-width: 8px !important;
+          stroke: #ff6b35 !important;
+        }
+        100% { 
+          opacity: 0.7; 
+          stroke-width: 4px !important;
+          stroke: #f59e0b !important;
+        }
+      }
+      
+      /* More specific selectors for ReactFlow edges */
+      .react-flow__edge.pulsating-edge path {
+        stroke: #f59e0b !important;
+        stroke-width: 6px !important;
+        stroke-dasharray: 15,10 !important;
+        animation: pulse-flow 2s ease-in-out infinite !important;
+      }
+      
+      /* Even more specific */
+      .react-flow__edges .pulsating-edge path {
+        stroke: #f59e0b !important;
+        stroke-width: 6px !important;
+        stroke-dasharray: 15,10 !important;
+        animation: pulse-flow 2s ease-in-out infinite !important;
       }
     `;
     
-    if (!document.querySelector('#pulsating-animation-styles')) {
-      style.id = 'pulsating-animation-styles';
-      document.head.appendChild(style);
-      console.log('5QI Pulsating Animation: Added CSS styles');
+    // Remove existing styles first
+    const existingStyle = document.querySelector('#pulsating-animation-styles');
+    if (existingStyle) {
+      existingStyle.remove();
     }
+    
+    style.id = 'pulsating-animation-styles';
+    document.head.appendChild(style);
+    console.log('5QI Pulsating Animation: Added enhanced CSS styles with !important');
     
   }, [reactFlowInstance, isDefault, data.nodeId]);
 
