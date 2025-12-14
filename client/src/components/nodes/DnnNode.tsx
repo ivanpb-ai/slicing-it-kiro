@@ -103,6 +103,48 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
     console.log(`DNN Flow Animation: ${shouldAnimate ? 'Activated' : 'Deactivated'} for ${pathEdges.size} edges`);
   }, [reactFlowInstance]);
 
+  const triggerDownstreamAnimationCheck = useCallback(() => {
+    if (!reactFlowInstance) return;
+    
+    const edges = reactFlowInstance.getEdges();
+    const nodes = reactFlowInstance.getNodes();
+    
+    // Find all downstream 5QI nodes that might need animation updates
+    const queue = [data.nodeId || ''];
+    const visitedNodes = new Set<string>();
+    const fiveQINodes = new Set<string>();
+    
+    while (queue.length > 0) {
+      const currentNodeId = queue.shift()!;
+      if (visitedNodes.has(currentNodeId)) continue;
+      visitedNodes.add(currentNodeId);
+      
+      const currentNode = nodes.find(n => n.id === currentNodeId);
+      if (currentNode?.data?.type === 'fiveqi') {
+        fiveQINodes.add(currentNodeId);
+      }
+      
+      // Find outgoing edges (going down the hierarchy)
+      const outgoingEdges = edges.filter(edge => edge.source === currentNodeId);
+      outgoingEdges.forEach(edge => {
+        if (!visitedNodes.has(edge.target)) {
+          queue.push(edge.target);
+        }
+      });
+    }
+    
+    // Trigger animation check on all found 5QI nodes
+    fiveQINodes.forEach(fiveQINodeId => {
+      const fiveQIElement = document.querySelector(`[data-id="${fiveQINodeId}"]`);
+      if (fiveQIElement) {
+        const animationEvent = new CustomEvent('triggerPulsatingAnimation', {
+          detail: { nodeId: fiveQINodeId, shouldCheck: true }
+        });
+        fiveQIElement.dispatchEvent(animationEvent);
+      }
+    });
+  }, [reactFlowInstance, data.nodeId]);
+
   const handleActiveChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked;
     setIsActive(newValue);
@@ -112,7 +154,10 @@ const DnnNode = memo(({ data }: DnnNodeProps) => {
     
     // Use updateNodeData to properly persist the change
     updateNodeData(data.nodeId || '', { ...data, dnnActive: newValue });
-  }, [data, updateNodeData, animateFlowPath]);
+    
+    // Trigger animation check on downstream 5QI nodes
+    setTimeout(() => triggerDownstreamAnimationCheck(), 100);
+  }, [data, updateNodeData, animateFlowPath, triggerDownstreamAnimationCheck]);
 
   const handleBlur = useCallback(() => {
     setIsEditing(false);

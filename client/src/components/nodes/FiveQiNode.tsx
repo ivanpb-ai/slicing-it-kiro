@@ -29,6 +29,57 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   console.log("5QI Node rendering with data:", data);
   console.log("5QI Node fiveQIId:", fiveQIId);
 
+  // Function to clear all pulsating animations
+  const clearAllPulsatingAnimations = useCallback(() => {
+    if (!reactFlowInstance) return;
+    
+    const edges = reactFlowInstance.getEdges();
+    const allEdgeIds = edges.map(edge => edge.id);
+    
+    // Remove pulsating styles from all edges
+    const updatedEdges = edges.map(edge => ({
+      ...edge,
+      animated: false,
+      style: {
+        stroke: '#2563eb',
+        strokeWidth: 3,
+        strokeDasharray: undefined,
+        opacity: 1,
+      },
+      className: '',
+      data: {
+        ...edge.data,
+        isPulsating: false
+      }
+    }));
+    
+    reactFlowInstance.setEdges(updatedEdges);
+    
+    // Also clear DOM styles
+    setTimeout(() => {
+      allEdgeIds.forEach(edgeId => {
+        const edgeElement = document.querySelector(`[data-id="${edgeId}"]`);
+        if (edgeElement) {
+          edgeElement.removeAttribute('data-ispulsating');
+          edgeElement.classList.remove('pulsating-edge');
+          
+          const pathElement = edgeElement.querySelector('path');
+          if (pathElement) {
+            pathElement.style.stroke = '#2563eb';
+            pathElement.style.strokeWidth = '3px';
+            pathElement.style.strokeDasharray = '';
+            pathElement.style.animation = '';
+            pathElement.style.strokeLinecap = '';
+            pathElement.style.vectorEffect = '';
+            pathElement.style.opacity = '1';
+          }
+        }
+      });
+    }, 50);
+    
+    console.log('5QI Pulsating Animation: Cleared all animations');
+  }, [reactFlowInstance]);
+
   // Function to check if parent DNN is activated and child QoS Flow is default, then trigger pulsating animation
   const checkAndTriggerPulsatingAnimation = useCallback(() => {
     console.log('5QI Pulsating Animation: Function called', { 
@@ -57,7 +108,8 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
     });
     
     if (!hasDefaultQoSFlow) {
-      console.log('5QI Pulsating Animation: No default QoS Flow nodes connected, skipping animation');
+      console.log('5QI Pulsating Animation: No default QoS Flow nodes connected, clearing all animations');
+      clearAllPulsatingAnimations();
       return;
     }
     
@@ -101,8 +153,9 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         });
         
         if (!dnnActivated) {
-          console.log('5QI Pulsating Animation: Parent DNN not activated, skipping animation');
-          return; // DNN not activated, don't animate
+          console.log('5QI Pulsating Animation: Parent DNN not activated, clearing all animations');
+          clearAllPulsatingAnimations();
+          return;
         }
       }
       
@@ -132,11 +185,6 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       dnnActivated,
       pathEdges: pathEdgesArray
     });
-    
-    if (pathEdgesArray.length === 0) {
-      console.log('5QI Pulsating Animation: No path found, returning');
-      return;
-    }
     
     if (!dnnFound) {
       console.log('5QI Pulsating Animation: No DNN found in path, continuing anyway');
@@ -191,25 +239,46 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
             }
             
             const pathElement = edgeElement.querySelector('path');
-            if (pathElement && shouldPulse) {
-              pathElement.style.stroke = '#f59e0b';
-              pathElement.style.strokeWidth = '6px';
-              pathElement.style.strokeDasharray = '20,15';
-              pathElement.style.animation = 'pulse-flow 1.2s ease-in-out infinite';
-              pathElement.style.strokeLinecap = 'round';
-              pathElement.style.vectorEffect = 'non-scaling-stroke';
-              pathElement.style.opacity = '0.9';
-              console.log('5QI Pulsating Animation: Applied direct DOM styling to', edgeId);
+            if (pathElement) {
+              if (shouldPulse) {
+                pathElement.style.stroke = '#f59e0b';
+                pathElement.style.strokeWidth = '6px';
+                pathElement.style.strokeDasharray = '20,15';
+                pathElement.style.animation = 'pulse-flow 1.2s ease-in-out infinite';
+                pathElement.style.strokeLinecap = 'round';
+                pathElement.style.vectorEffect = 'non-scaling-stroke';
+                pathElement.style.opacity = '0.9';
+              } else {
+                // Reset to default styles
+                pathElement.style.stroke = '#2563eb';
+                pathElement.style.strokeWidth = '3px';
+                pathElement.style.strokeDasharray = '';
+                pathElement.style.animation = '';
+                pathElement.style.strokeLinecap = '';
+                pathElement.style.vectorEffect = '';
+                pathElement.style.opacity = '1';
+              }
+              console.log('5QI Pulsating Animation: Applied direct DOM styling to', edgeId, 'shouldPulse:', shouldPulse);
             }
           }
         });
       }, 100);
     };
     
-    // Start pulsating animation
-    animateEdgesPulsating(pathEdgesArray, true);
+    // Determine if animation should be active based on conditions
+    const shouldAnimate = hasDefaultQoSFlow && dnnActivated && pathEdgesArray.length > 0;
     
-    console.log(`5QI Pulsating Animation: Started for ${pathEdgesArray.length} edges from 5QI to network`);
+    if (pathEdgesArray.length === 0) {
+      console.log('5QI Pulsating Animation: No path found, stopping any existing animations');
+      // Stop animation on all edges to clear any existing animations
+      const allEdgeIds = edges.map(edge => edge.id);
+      animateEdgesPulsating(allEdgeIds, false);
+    } else {
+      // Start or stop pulsating animation on the specific path
+      animateEdgesPulsating(pathEdgesArray, shouldAnimate);
+    }
+    
+    console.log(`5QI Pulsating Animation: ${shouldAnimate ? 'Started' : 'Stopped'} for ${pathEdgesArray.length} edges from 5QI to network`);
     
     // Add enhanced CSS for pulsating effect with zoom-independent animation
     const style = document.createElement('style');
@@ -306,7 +375,7 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
     document.head.appendChild(style);
     console.log('5QI Pulsating Animation: Added enhanced CSS styles with !important');
     
-  }, [reactFlowInstance, data.nodeId]);
+  }, [reactFlowInstance, data.nodeId, clearAllPulsatingAnimations]);
 
   // Check for pulsating animation when component mounts or when QoS Flow nodes change
   useEffect(() => {

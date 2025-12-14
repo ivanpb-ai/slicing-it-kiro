@@ -28,7 +28,7 @@ const QoSFlowNode = memo(({ id, data }: QoSFlowNodeProps) => {
 
   // Function to trigger pulsating animation on connected 5QI nodes
   const triggerPulsatingAnimation = useCallback(() => {
-    if (!reactFlowInstance || !isDefault) {
+    if (!reactFlowInstance) {
       return;
     }
 
@@ -41,21 +41,21 @@ const QoSFlowNode = memo(({ id, data }: QoSFlowNodeProps) => {
       .map(edge => nodes.find(n => n.id === edge.target))
       .filter(node => node?.data?.type === 'fiveqi');
     
-    // Trigger animation check on each connected 5QI node
+    // Trigger animation check on each connected 5QI node (both enable and disable)
     connectedFiveQINodes.forEach(fiveQINode => {
       if (fiveQINode) {
         // Find the 5QI node component and trigger its animation
         const fiveQIElement = document.querySelector(`[data-id="${fiveQINode.id}"]`);
         if (fiveQIElement) {
-          // Dispatch a custom event to trigger animation
+          // Dispatch a custom event to trigger animation check
           const animationEvent = new CustomEvent('triggerPulsatingAnimation', {
-            detail: { nodeId: fiveQINode.id }
+            detail: { nodeId: fiveQINode.id, shouldCheck: true }
           });
           fiveQIElement.dispatchEvent(animationEvent);
         }
       }
     });
-  }, [reactFlowInstance, isDefault, id]);
+  }, [reactFlowInstance, id]);
 
   // Handle default checkbox change
   const handleDefaultChange = useCallback((checked: boolean) => {
@@ -64,10 +64,8 @@ const QoSFlowNode = memo(({ id, data }: QoSFlowNodeProps) => {
       updateNodeData(id, { ...data, isDefault: checked });
     }
     
-    // Trigger pulsating animation check after state update
-    if (checked) {
-      setTimeout(() => triggerPulsatingAnimation(), 100);
-    }
+    // Trigger pulsating animation check after state update (both on and off)
+    setTimeout(() => triggerPulsatingAnimation(), 100);
   }, [data, updateNodeData, id, triggerPulsatingAnimation]);
 
   // Extract QoS flow ID for display
