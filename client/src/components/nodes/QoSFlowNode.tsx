@@ -1,7 +1,7 @@
-import { useState, memo } from "react";
+import { useState, memo, useCallback, useEffect } from "react";
 import { NodeData } from "../../types/nodeTypes";
 import { Badge } from "../../components/ui/badge";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { useNodeEditorContext } from "../../contexts/NodeEditorContext";
 
 interface QoSFlowNodeProps {
@@ -16,6 +16,7 @@ const QoSFlowNode = memo(({ id, data }: QoSFlowNodeProps) => {
 
   // Get node editor context for updating node data
   const { updateNodeData } = useNodeEditorContext();
+  const reactFlowInstance = useReactFlow();
 
   // Handle name change
   const handleNameChange = (newName: string) => {
@@ -25,16 +26,66 @@ const QoSFlowNode = memo(({ id, data }: QoSFlowNodeProps) => {
     }
   };
 
+  // Function to trigger pulsating animation on connected 5QI nodes
+  const triggerPulsatingAnimation = useCallback(() => {
+    if (!reactFlowInstance || !isDefault) {
+      return;
+    }
+
+    const edges = reactFlowInstance.getEdges();
+    const nodes = reactFlowInstance.getNodes();
+    
+    // Find 5QI nodes connected to this QoS Flow node
+    const connectedFiveQINodes = edges
+      .filter(edge => edge.source === id)
+      .map(edge => nodes.find(n => n.id === edge.target))
+      .filter(node => node?.data?.type === 'fiveqi');
+    
+    // Trigger animation check on each connected 5QI node
+    connectedFiveQINodes.forEach(fiveQINode => {
+      if (fiveQINode) {
+        // Find the 5QI node component and trigger its animation
+        const fiveQIElement = document.querySelector(`[data-id="${fiveQINode.id}"]`);
+        if (fiveQIElement) {
+          // Dispatch a custom event to trigger animation
+          const animationEvent = new CustomEvent('triggerPulsatingAnimation', {
+            detail: { nodeId: fiveQINode.id }
+          });
+          fiveQIElement.dispatchEvent(animationEvent);
+        }
+      }
+    });
+  }, [reactFlowInstance, isDefault, id]);
+
   // Handle default checkbox change
-  const handleDefaultChange = (checked: boolean) => {
+  const handleDefaultChange = useCallback((checked: boolean) => {
     setIsDefault(checked);
     if (updateNodeData && id) {
       updateNodeData(id, { ...data, isDefault: checked });
     }
-  };
+    
+    // Trigger pulsating animation check after state update
+    if (checked) {
+      setTimeout(() => triggerPulsatingAnimation(), 100);
+    }
+  }, [data, updateNodeData, id, triggerPulsatingAnimation]);
 
   // Extract QoS flow ID for display
   const qosFlowId = data.qosFlowId || data.id;
+
+  // Sync isDefault state with data changes
+  useEffect(() => {
+    if (data.isDefault !== undefined && data.isDefault !== isDefault) {
+      setIsDefault(data.isDefault);
+    }
+  }, [data.isDefault, isDefault]);
+
+  // Trigger animation when component mounts with default checked or when default state changes
+  useEffect(() => {
+    if (isDefault && reactFlowInstance) {
+      setTimeout(() => triggerPulsatingAnimation(), 500);
+    }
+  }, [isDefault, reactFlowInstance, triggerPulsatingAnimation]);
 
   return (
     <div className="w-full h-full flex flex-col items-center relative">

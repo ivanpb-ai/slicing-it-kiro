@@ -14,7 +14,7 @@ interface FiveQiNodeProps {
 const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   // Use state to track the actual QoS values we should display
   const [qosValues, setQosValues] = useState(data.qosValues);
-  const [isDefault, setIsDefault] = useState(data.fiveQiDefault !== undefined ? data.fiveQiDefault : false);
+
   
   // Use ref to track previous fiveQIId to prevent unnecessary updates
   const previousFiveQIIdRef = useRef(data.fiveQIId);
@@ -29,16 +29,15 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   console.log("5QI Node rendering with data:", data);
   console.log("5QI Node fiveQIId:", fiveQIId);
 
-  // Function to check if parent DNN is activated and trigger pulsating animation
+  // Function to check if parent DNN is activated and child QoS Flow is default, then trigger pulsating animation
   const checkAndTriggerPulsatingAnimation = useCallback(() => {
     console.log('5QI Pulsating Animation: Function called', { 
       hasReactFlow: !!reactFlowInstance, 
-      isDefault, 
       nodeId: data.nodeId 
     });
     
-    if (!reactFlowInstance || !isDefault) {
-      console.log('5QI Pulsating Animation: Early return - missing reactFlow or not default');
+    if (!reactFlowInstance) {
+      console.log('5QI Pulsating Animation: Early return - missing reactFlow');
       return;
     }
     
@@ -49,6 +48,18 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       totalEdges: edges.length, 
       totalNodes: nodes.length 
     });
+    
+    // First, check if there are any default QoS Flow nodes connected to this 5QI node
+    const connectedQoSFlows = edges.filter(edge => edge.target === (data.nodeId || ''));
+    const hasDefaultQoSFlow = connectedQoSFlows.some(edge => {
+      const qosFlowNode = nodes.find(n => n.id === edge.source);
+      return qosFlowNode?.data?.type === 'qosflow' && qosFlowNode?.data?.isDefault === true;
+    });
+    
+    if (!hasDefaultQoSFlow) {
+      console.log('5QI Pulsating Animation: No default QoS Flow nodes connected, skipping animation');
+      return;
+    }
     
     // Find ALL paths from this 5QI node up to the network node
     const pathToNetwork = new Set<string>();
@@ -295,36 +306,44 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
     document.head.appendChild(style);
     console.log('5QI Pulsating Animation: Added enhanced CSS styles with !important');
     
-  }, [reactFlowInstance, isDefault, data.nodeId]);
+  }, [reactFlowInstance, data.nodeId]);
 
-  // Handle default checkbox change
-  const handleDefaultChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked;
-    setIsDefault(newValue);
-    
-    // Trigger pulsating animation check
-    if (newValue) {
-      setTimeout(() => checkAndTriggerPulsatingAnimation(), 100);
-    }
-    
-    // Use updateNodeData to properly persist the change
-    updateNodeData(data.nodeId || '', { ...data, fiveQiDefault: newValue });
-  }, [data, updateNodeData, checkAndTriggerPulsatingAnimation]);
-
-  // Sync isDefault state with data changes
+  // Check for pulsating animation when component mounts or when QoS Flow nodes change
   useEffect(() => {
-    if (data.fiveQiDefault !== undefined && data.fiveQiDefault !== isDefault) {
-      setIsDefault(data.fiveQiDefault);
-    }
-  }, [data.fiveQiDefault, isDefault]);
-
-  // Check for pulsating animation when component mounts or when default state changes
-  useEffect(() => {
-    if (isDefault && reactFlowInstance) {
+    if (reactFlowInstance) {
       // Small delay to ensure all nodes are rendered
       setTimeout(() => checkAndTriggerPulsatingAnimation(), 500);
     }
-  }, [isDefault, reactFlowInstance, checkAndTriggerPulsatingAnimation]);
+  }, [reactFlowInstance, checkAndTriggerPulsatingAnimation]);
+
+  // Listen for custom events from QoS Flow nodes
+  useEffect(() => {
+    const handleAnimationTrigger = (event: CustomEvent) => {
+      if (event.detail?.nodeId === data.nodeId) {
+        setTimeout(() => checkAndTriggerPulsatingAnimation(), 100);
+      }
+    };
+
+    const nodeElement = document.querySelector(`[data-id="${data.nodeId}"]`);
+    if (nodeElement) {
+      nodeElement.addEventListener('triggerPulsatingAnimation', handleAnimationTrigger as EventListener);
+      
+      return () => {
+        nodeElement.removeEventListener('triggerPulsatingAnimation', handleAnimationTrigger as EventListener);
+      };
+    }
+  }, [data.nodeId, checkAndTriggerPulsatingAnimation]);
+
+  // Periodically check for animation conditions (as a fallback)
+  useEffect(() => {
+    if (reactFlowInstance) {
+      const interval = setInterval(() => {
+        checkAndTriggerPulsatingAnimation();
+      }, 2000); // Check every 2 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [reactFlowInstance, checkAndTriggerPulsatingAnimation]);
   
   // Use effect to load QoS values if we have a fiveQIId
   useEffect(() => {
@@ -438,22 +457,7 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         </div>
       </div>
 
-      {/* Default checkbox */}
-      <div className="mt-4 flex items-center justify-center gap-2">
-        <input
-          type="checkbox"
-          id={`fiveqi-default-${data.nodeId}`}
-          checked={isDefault}
-          onChange={handleDefaultChange}
-          className="w-5 h-5 cursor-pointer"
-        />
-        <label 
-          htmlFor={`fiveqi-default-${data.nodeId}`}
-          className="text-lg font-medium text-gray-700 cursor-pointer select-none"
-        >
-          Default
-        </label>
-      </div>
+
       
 
           </div>
