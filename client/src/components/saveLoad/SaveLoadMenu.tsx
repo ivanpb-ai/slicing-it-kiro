@@ -10,6 +10,7 @@ import { SavedGraph } from '@/hooks/types';
 import type { GraphData } from '@/services/storage/GraphLocalStorageService';
 import { toast } from 'sonner';
 import FileImportInput from '@/components/flow/FileImportInput';
+import UpdateExampleGraphButton from '@/components/dev/UpdateExampleGraphButton';
 
 type SaveLoadMenuProps = {
   onSave: () => boolean;
@@ -103,6 +104,13 @@ const SaveLoadMenu: React.FC<SaveLoadMenuProps> = ({
         onImport={handleFileSelected}
         inputRef={fileInputRef}
       />
+      
+      {/* Developer utility - only show in development */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="border-t border-gray-200 pt-2 mt-2">
+          <UpdateExampleGraphButton />
+        </div>
+      )}
       
       {/* Zoom Controls */}
       <div className="border-t border-gray-200 pt-2 mt-2">

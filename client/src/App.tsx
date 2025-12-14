@@ -12,6 +12,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
+// Import utility for updating example graph (makes functions available in console)
+import "./utils/updateExampleGraph";
+import "./scripts/setLargeGraph1AsExample";
+
 const queryClient = new QueryClient();
 
 const App = () => (
