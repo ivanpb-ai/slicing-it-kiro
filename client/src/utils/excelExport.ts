@@ -6,15 +6,10 @@ export const exportToExcel = (nodes: Node[], edges: Edge[], filename?: string): 
     // Create workbook
     const workbook = XLSX.utils.book_new();
     
-    // Prepare nodes data
+    // Prepare nodes data (excluding Node ID, Position X, Position Y, Width, Height)
     const nodesData = nodes.map(node => ({
-      'Node ID': node.id,
       'Type': node.data?.type || 'unknown',
       'Label': node.data?.label || node.id,
-      'Position X': node.position.x,
-      'Position Y': node.position.y,
-      'Width': node.measured?.width || node.width || 'auto',
-      'Height': node.measured?.height || node.height || 'auto',
       // Add type-specific data
       'Network': node.data?.network || '',
       'Cell Area': node.data?.['cell-area'] || '',
