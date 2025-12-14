@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, memo, useCallback } from "react";
 import { NodeData } from "../../types/nodeTypes";
 import { Badge } from "../../components/ui/badge";
 import { getFiveQIValueById } from "../../utils/flowData/utils/fiveQIUtils";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { useNodeEditorContext } from "../../contexts/NodeEditorContext";
 
 
@@ -21,6 +21,7 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   
   // Get node editor context for updating node data
   const { updateNodeData } = useNodeEditorContext();
+  const reactFlowInstance = useReactFlow();
   
   // Extract fiveQIId correctly - always ensure it's a string
   const fiveQIId = data.fiveQIId ? String(data.fiveQIId) : undefined;
@@ -28,14 +29,105 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
   console.log("5QI Node rendering with data:", data);
   console.log("5QI Node fiveQIId:", fiveQIId);
 
+  // Function to check if parent DNN is activated and trigger pulsating animation
+  const checkAndTriggerPulsatingAnimation = useCallback(() => {
+    if (!reactFlowInstance || !isDefault) return;
+    
+    const edges = reactFlowInstance.getEdges();
+    const nodes = reactFlowInstance.getNodes();
+    
+    // Find the path from this 5QI node up to the network node
+    const pathToNetwork = [];
+    let currentNodeId = data.nodeId || '';
+    const visitedNodes = new Set();
+    
+    // Traverse up the hierarchy: 5QI -> QoS Flow -> DNN -> S-NSSAI -> Network
+    while (currentNodeId && !visitedNodes.has(currentNodeId)) {
+      visitedNodes.add(currentNodeId);
+      
+      // Find the current node
+      const currentNode = nodes.find(n => n.id === currentNodeId);
+      if (!currentNode) break;
+      
+      // If this is a DNN node, check if it's activated
+      if (currentNode.data?.type === 'dnn' && !currentNode.data?.dnnActive) {
+        console.log('5QI Pulsating Animation: Parent DNN not activated, skipping animation');
+        return; // DNN not activated, don't animate
+      }
+      
+      // Find outgoing edge (going up the hierarchy)
+      const outgoingEdge = edges.find(edge => edge.source === currentNodeId);
+      if (outgoingEdge) {
+        pathToNetwork.push(outgoingEdge.id);
+        currentNodeId = outgoingEdge.target;
+      } else {
+        break;
+      }
+    }
+    
+    if (pathToNetwork.length === 0) return;
+    
+    // Create pulsating animation effect
+    const animateEdgesPulsating = (edgeIds: string[], shouldPulse: boolean) => {
+      const updatedEdges = edges.map(edge => {
+        if (edgeIds.includes(edge.id)) {
+          return {
+            ...edge,
+            animated: shouldPulse,
+            style: {
+              ...edge.style,
+              stroke: shouldPulse ? '#f59e0b' : '#2563eb', // Orange for pulsating, blue for normal
+              strokeWidth: shouldPulse ? 5 : 3,
+              strokeDasharray: shouldPulse ? '10,5' : undefined,
+            },
+            className: shouldPulse ? 'pulsating-edge' : undefined,
+          };
+        }
+        return edge;
+      });
+      
+      reactFlowInstance.setEdges(updatedEdges);
+    };
+    
+    // Start pulsating animation
+    animateEdgesPulsating(pathToNetwork, true);
+    
+    console.log(`5QI Pulsating Animation: Started for ${pathToNetwork.length} edges from 5QI to network`);
+    
+    // Add CSS for pulsating effect
+    const style = document.createElement('style');
+    style.textContent = `
+      .pulsating-edge {
+        animation: pulse-flow 2s ease-in-out infinite;
+      }
+      
+      @keyframes pulse-flow {
+        0% { opacity: 0.6; stroke-width: 3px; }
+        50% { opacity: 1; stroke-width: 6px; }
+        100% { opacity: 0.6; stroke-width: 3px; }
+      }
+    `;
+    
+    if (!document.querySelector('#pulsating-animation-styles')) {
+      style.id = 'pulsating-animation-styles';
+      document.head.appendChild(style);
+    }
+    
+  }, [reactFlowInstance, isDefault, data.nodeId]);
+
   // Handle default checkbox change
   const handleDefaultChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked;
     setIsDefault(newValue);
     
+    // Trigger pulsating animation check
+    if (newValue) {
+      setTimeout(() => checkAndTriggerPulsatingAnimation(), 100);
+    }
+    
     // Use updateNodeData to properly persist the change
     updateNodeData(data.nodeId || '', { ...data, fiveQiDefault: newValue });
-  }, [data, updateNodeData]);
+  }, [data, updateNodeData, checkAndTriggerPulsatingAnimation]);
 
   // Sync isDefault state with data changes
   useEffect(() => {
@@ -43,6 +135,14 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       setIsDefault(data.fiveQiDefault);
     }
   }, [data.fiveQiDefault, isDefault]);
+
+  // Check for pulsating animation when component mounts or when default state changes
+  useEffect(() => {
+    if (isDefault && reactFlowInstance) {
+      // Small delay to ensure all nodes are rendered
+      setTimeout(() => checkAndTriggerPulsatingAnimation(), 500);
+    }
+  }, [isDefault, reactFlowInstance, checkAndTriggerPulsatingAnimation]);
   
   // Use effect to load QoS values if we have a fiveQIId
   useEffect(() => {
