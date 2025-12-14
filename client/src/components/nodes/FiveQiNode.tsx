@@ -183,9 +183,11 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
             if (pathElement && shouldPulse) {
               pathElement.style.stroke = '#f59e0b';
               pathElement.style.strokeWidth = '6px';
-              pathElement.style.strokeDasharray = '15,10';
-              pathElement.style.animation = 'pulse-flow 1.5s ease-in-out infinite';
+              pathElement.style.strokeDasharray = '20,15';
+              pathElement.style.animation = 'pulse-flow 1.2s ease-in-out infinite';
               pathElement.style.strokeLinecap = 'round';
+              pathElement.style.vectorEffect = 'non-scaling-stroke';
+              pathElement.style.opacity = '0.9';
               console.log('5QI Pulsating Animation: Applied direct DOM styling to', edgeId);
             }
           }
@@ -198,51 +200,66 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
     
     console.log(`5QI Pulsating Animation: Started for ${pathEdgesArray.length} edges from 5QI to network`);
     
-    // Add enhanced CSS for pulsating effect with better animation
+    // Add enhanced CSS for pulsating effect with zoom-independent animation
     const style = document.createElement('style');
     style.textContent = `
       @keyframes pulse-flow {
         0% { 
-          opacity: 0.6;
+          opacity: 0.7;
           stroke: #f59e0b !important;
-          stroke-width: 4px !important;
-          filter: drop-shadow(0 0 4px #f59e0b);
+          stroke-width: 5px !important;
         }
         25% { 
-          opacity: 0.8;
+          opacity: 0.85;
           stroke: #ff8c42 !important;
-          stroke-width: 6px !important;
-          filter: drop-shadow(0 0 8px #ff8c42);
+          stroke-width: 7px !important;
         }
         50% { 
           opacity: 1;
           stroke: #ff6b35 !important;
-          stroke-width: 8px !important;
-          filter: drop-shadow(0 0 12px #ff6b35);
+          stroke-width: 9px !important;
         }
         75% { 
-          opacity: 0.8;
+          opacity: 0.85;
           stroke: #ff8c42 !important;
-          stroke-width: 6px !important;
-          filter: drop-shadow(0 0 8px #ff8c42);
+          stroke-width: 7px !important;
         }
         100% { 
-          opacity: 0.6;
+          opacity: 0.7;
           stroke: #f59e0b !important;
-          stroke-width: 4px !important;
-          filter: drop-shadow(0 0 4px #f59e0b);
+          stroke-width: 5px !important;
         }
       }
       
-      /* Target ReactFlow edges with pulsating class */
+      @keyframes pulse-glow {
+        0% { 
+          filter: drop-shadow(0 0 3px #f59e0b);
+        }
+        50% { 
+          filter: drop-shadow(0 0 8px #ff6b35);
+        }
+        100% { 
+          filter: drop-shadow(0 0 3px #f59e0b);
+        }
+      }
+      
+      /* Target ReactFlow edges with pulsating class - zoom independent */
       .react-flow__edge.pulsating-edge path,
       .react-flow__edges .pulsating-edge path,
       .pulsating-edge path {
         stroke: #f59e0b !important;
         stroke-width: 6px !important;
-        stroke-dasharray: 15,10 !important;
-        animation: pulse-flow 1.5s ease-in-out infinite !important;
+        stroke-dasharray: 20,15 !important;
+        animation: pulse-flow 1.2s ease-in-out infinite !important;
         stroke-linecap: round !important;
+        vector-effect: non-scaling-stroke !important;
+      }
+      
+      /* Add glow effect separately to avoid zoom issues */
+      .react-flow__edge.pulsating-edge,
+      .react-flow__edges .pulsating-edge,
+      .pulsating-edge {
+        animation: pulse-glow 1.2s ease-in-out infinite !important;
       }
       
       /* Force animation on any edge with pulsating data */
@@ -250,9 +267,21 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       .react-flow__edge[data-ispulsating="true"] path {
         stroke: #f59e0b !important;
         stroke-width: 6px !important;
-        stroke-dasharray: 15,10 !important;
-        animation: pulse-flow 1.5s ease-in-out infinite !important;
+        stroke-dasharray: 20,15 !important;
+        animation: pulse-flow 1.2s ease-in-out infinite !important;
         stroke-linecap: round !important;
+        vector-effect: non-scaling-stroke !important;
+      }
+      
+      /* Ensure visibility at all zoom levels */
+      .react-flow__viewport .pulsating-edge path {
+        stroke: #f59e0b !important;
+        stroke-width: 6px !important;
+        stroke-dasharray: 20,15 !important;
+        animation: pulse-flow 1.2s ease-in-out infinite !important;
+        stroke-linecap: round !important;
+        vector-effect: non-scaling-stroke !important;
+        opacity: 0.9 !important;
       }
     `;
     
