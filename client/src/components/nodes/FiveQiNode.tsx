@@ -50,24 +50,28 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
       totalNodes: nodes.length 
     });
     
-    // Find the path from this 5QI node up to the network node
-    const pathToNetwork = [];
-    let currentNodeId = data.nodeId || '';
-    const visitedNodes = new Set();
+    // Find ALL paths from this 5QI node up to the network node
+    const pathToNetwork = new Set<string>();
     let dnnFound = false;
     let dnnActivated = false;
     
-    console.log('5QI Pulsating Animation: Starting traversal from node:', currentNodeId);
+    console.log('5QI Pulsating Animation: Starting traversal from node:', data.nodeId);
     
-    // Traverse up the hierarchy: 5QI -> QoS Flow -> DNN -> S-NSSAI -> Network
-    while (currentNodeId && !visitedNodes.has(currentNodeId)) {
+    // Use breadth-first search to find all paths
+    const queue = [data.nodeId || ''];
+    const visitedNodes = new Set<string>();
+    
+    while (queue.length > 0) {
+      const currentNodeId = queue.shift()!;
+      
+      if (visitedNodes.has(currentNodeId)) continue;
       visitedNodes.add(currentNodeId);
       
       // Find the current node
       const currentNode = nodes.find(n => n.id === currentNodeId);
       if (!currentNode) {
         console.log('5QI Pulsating Animation: Node not found:', currentNodeId);
-        break;
+        continue;
       }
       
       console.log('5QI Pulsating Animation: Processing node:', {
@@ -91,26 +95,34 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         }
       }
       
-      // Find incoming edge (going up the hierarchy from 5QI to Network)
-      const incomingEdge = edges.find(edge => edge.target === currentNodeId);
-      if (incomingEdge) {
-        pathToNetwork.push(incomingEdge.id);
-        console.log('5QI Pulsating Animation: Added edge to path:', incomingEdge.id);
-        currentNodeId = incomingEdge.source;
+      // Find ALL incoming edges (going up the hierarchy from 5QI to Network)
+      const incomingEdges = edges.filter(edge => edge.target === currentNodeId);
+      
+      if (incomingEdges.length > 0) {
+        incomingEdges.forEach(incomingEdge => {
+          pathToNetwork.add(incomingEdge.id);
+          console.log('5QI Pulsating Animation: Added edge to path:', incomingEdge.id);
+          
+          // Add source node to queue for further processing
+          if (!visitedNodes.has(incomingEdge.source)) {
+            queue.push(incomingEdge.source);
+          }
+        });
       } else {
-        console.log('5QI Pulsating Animation: No incoming edge found for node:', currentNodeId);
-        break;
+        console.log('5QI Pulsating Animation: No incoming edges found for node:', currentNodeId);
       }
     }
     
+    const pathEdgesArray = Array.from(pathToNetwork);
+    
     console.log('5QI Pulsating Animation: Path analysis', {
-      pathLength: pathToNetwork.length,
+      pathLength: pathEdgesArray.length,
       dnnFound,
       dnnActivated,
-      pathEdges: pathToNetwork
+      pathEdges: pathEdgesArray
     });
     
-    if (pathToNetwork.length === 0) {
+    if (pathEdgesArray.length === 0) {
       console.log('5QI Pulsating Animation: No path found, returning');
       return;
     }
@@ -158,12 +170,22 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         edgeIds.forEach(edgeId => {
           const edgeElement = document.querySelector(`[data-id="${edgeId}"]`);
           if (edgeElement) {
+            if (shouldPulse) {
+              // Add pulsating data attribute
+              edgeElement.setAttribute('data-ispulsating', 'true');
+              edgeElement.classList.add('pulsating-edge');
+            } else {
+              edgeElement.removeAttribute('data-ispulsating');
+              edgeElement.classList.remove('pulsating-edge');
+            }
+            
             const pathElement = edgeElement.querySelector('path');
             if (pathElement && shouldPulse) {
               pathElement.style.stroke = '#f59e0b';
               pathElement.style.strokeWidth = '6px';
               pathElement.style.strokeDasharray = '15,10';
-              pathElement.style.animation = 'pulse-flow 2s ease-in-out infinite';
+              pathElement.style.animation = 'pulse-flow 1.5s ease-in-out infinite';
+              pathElement.style.strokeLinecap = 'round';
               console.log('5QI Pulsating Animation: Applied direct DOM styling to', edgeId);
             }
           }
@@ -172,52 +194,65 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
     };
     
     // Start pulsating animation
-    animateEdgesPulsating(pathToNetwork, true);
+    animateEdgesPulsating(pathEdgesArray, true);
     
-    console.log(`5QI Pulsating Animation: Started for ${pathToNetwork.length} edges from 5QI to network`);
+    console.log(`5QI Pulsating Animation: Started for ${pathEdgesArray.length} edges from 5QI to network`);
     
-    // Add enhanced CSS for pulsating effect
+    // Add enhanced CSS for pulsating effect with better animation
     const style = document.createElement('style');
     style.textContent = `
-      .pulsating-edge path {
-        animation: pulse-flow 2s ease-in-out infinite !important;
-        stroke: #f59e0b !important;
-        stroke-width: 6px !important;
-        stroke-dasharray: 15,10 !important;
-      }
-      
       @keyframes pulse-flow {
         0% { 
-          opacity: 0.7; 
-          stroke-width: 4px !important;
+          opacity: 0.6;
           stroke: #f59e0b !important;
+          stroke-width: 4px !important;
+          filter: drop-shadow(0 0 4px #f59e0b);
+        }
+        25% { 
+          opacity: 0.8;
+          stroke: #ff8c42 !important;
+          stroke-width: 6px !important;
+          filter: drop-shadow(0 0 8px #ff8c42);
         }
         50% { 
-          opacity: 1; 
-          stroke-width: 8px !important;
+          opacity: 1;
           stroke: #ff6b35 !important;
+          stroke-width: 8px !important;
+          filter: drop-shadow(0 0 12px #ff6b35);
+        }
+        75% { 
+          opacity: 0.8;
+          stroke: #ff8c42 !important;
+          stroke-width: 6px !important;
+          filter: drop-shadow(0 0 8px #ff8c42);
         }
         100% { 
-          opacity: 0.7; 
-          stroke-width: 4px !important;
+          opacity: 0.6;
           stroke: #f59e0b !important;
+          stroke-width: 4px !important;
+          filter: drop-shadow(0 0 4px #f59e0b);
         }
       }
       
-      /* More specific selectors for ReactFlow edges */
-      .react-flow__edge.pulsating-edge path {
+      /* Target ReactFlow edges with pulsating class */
+      .react-flow__edge.pulsating-edge path,
+      .react-flow__edges .pulsating-edge path,
+      .pulsating-edge path {
         stroke: #f59e0b !important;
         stroke-width: 6px !important;
         stroke-dasharray: 15,10 !important;
-        animation: pulse-flow 2s ease-in-out infinite !important;
+        animation: pulse-flow 1.5s ease-in-out infinite !important;
+        stroke-linecap: round !important;
       }
       
-      /* Even more specific */
-      .react-flow__edges .pulsating-edge path {
+      /* Force animation on any edge with pulsating data */
+      [data-id*="pulsating"] path,
+      .react-flow__edge[data-ispulsating="true"] path {
         stroke: #f59e0b !important;
         stroke-width: 6px !important;
         stroke-dasharray: 15,10 !important;
-        animation: pulse-flow 2s ease-in-out infinite !important;
+        animation: pulse-flow 1.5s ease-in-out infinite !important;
+        stroke-linecap: round !important;
       }
     `;
     
