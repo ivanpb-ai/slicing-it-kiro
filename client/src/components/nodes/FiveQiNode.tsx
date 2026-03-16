@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef, memo, useCallback } from "react";
 import { NodeData } from "../../types/nodeTypes";
 import { Badge } from "../../components/ui/badge";
-import { getFiveQIValueById } from "../../utils/flowData/utils/fiveQIUtils";
+import { getFiveQIValueById, getAnimationParamsFromQoS } from "../../utils/flowData/utils/fiveQIUtils";
+import type { AnimationParams } from "../../utils/flowData/utils/fiveQIUtils";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { useNodeEditorContext } from "../../contexts/NodeEditorContext";
 
@@ -82,300 +83,223 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
 
   // Function to check if parent DNN is activated and child QoS Flow is default, then trigger pulsating animation
   const checkAndTriggerPulsatingAnimation = useCallback(() => {
-    console.log('5QI Pulsating Animation: Function called', { 
-      hasReactFlow: !!reactFlowInstance, 
-      nodeId: data.nodeId 
-    });
-    
-    if (!reactFlowInstance) {
-      console.log('5QI Pulsating Animation: Early return - missing reactFlow');
-      return;
-    }
-    
+    if (!reactFlowInstance) return;
+
     const edges = reactFlowInstance.getEdges();
     const nodes = reactFlowInstance.getNodes();
-    
-    console.log('5QI Pulsating Animation: Graph state', { 
-      totalEdges: edges.length, 
-      totalNodes: nodes.length 
-    });
-    
-    // First, check if there are any default QoS Flow nodes connected to this 5QI node
+
+    // Check if there are any default QoS Flow nodes connected to this 5QI node
     const connectedQoSFlows = edges.filter(edge => edge.target === (data.nodeId || ''));
     const hasDefaultQoSFlow = connectedQoSFlows.some(edge => {
       const qosFlowNode = nodes.find(n => n.id === edge.source);
       return qosFlowNode?.data?.type === 'qosflow' && qosFlowNode?.data?.isDefault === true;
     });
-    
+
     if (!hasDefaultQoSFlow) {
-      console.log('5QI Pulsating Animation: No default QoS Flow nodes connected, clearing all animations');
       clearAllPulsatingAnimations();
       return;
     }
-    
+
     // Find ALL paths from this 5QI node up to the network node
     const pathToNetwork = new Set<string>();
     let dnnFound = false;
     let dnnActivated = false;
-    
-    console.log('5QI Pulsating Animation: Starting traversal from node:', data.nodeId);
-    
-    // Use breadth-first search to find all paths
+
     const queue = [data.nodeId || ''];
     const visitedNodes = new Set<string>();
-    
+
     while (queue.length > 0) {
       const currentNodeId = queue.shift()!;
-      
       if (visitedNodes.has(currentNodeId)) continue;
       visitedNodes.add(currentNodeId);
-      
-      // Find the current node
+
       const currentNode = nodes.find(n => n.id === currentNodeId);
-      if (!currentNode) {
-        console.log('5QI Pulsating Animation: Node not found:', currentNodeId);
-        continue;
-      }
-      
-      console.log('5QI Pulsating Animation: Processing node:', {
-        id: currentNode.id,
-        type: currentNode.data?.type,
-        dnnActive: currentNode.data?.dnnActive
-      });
-      
-      // If this is a DNN node, check if it's activated
+      if (!currentNode) continue;
+
       if (currentNode.data?.type === 'dnn') {
         dnnFound = true;
         dnnActivated = currentNode.data?.dnnActive === true;
-        console.log('5QI Pulsating Animation: Found DNN node', {
-          id: currentNode.id,
-          activated: dnnActivated
-        });
-        
         if (!dnnActivated) {
-          console.log('5QI Pulsating Animation: Parent DNN not activated, clearing all animations');
           clearAllPulsatingAnimations();
           return;
         }
       }
-      
-      // Find ALL incoming edges (going up the hierarchy from 5QI to Network)
+
       const incomingEdges = edges.filter(edge => edge.target === currentNodeId);
-      
-      if (incomingEdges.length > 0) {
-        incomingEdges.forEach(incomingEdge => {
-          pathToNetwork.add(incomingEdge.id);
-          console.log('5QI Pulsating Animation: Added edge to path:', incomingEdge.id);
-          
-          // Add source node to queue for further processing
-          if (!visitedNodes.has(incomingEdge.source)) {
-            queue.push(incomingEdge.source);
-          }
-        });
-      } else {
-        console.log('5QI Pulsating Animation: No incoming edges found for node:', currentNodeId);
-      }
+      incomingEdges.forEach(incomingEdge => {
+        pathToNetwork.add(incomingEdge.id);
+        if (!visitedNodes.has(incomingEdge.source)) {
+          queue.push(incomingEdge.source);
+        }
+      });
     }
-    
+
     const pathEdgesArray = Array.from(pathToNetwork);
-    
-    console.log('5QI Pulsating Animation: Path analysis', {
-      pathLength: pathEdgesArray.length,
-      dnnFound,
-      dnnActivated,
-      pathEdges: pathEdgesArray
-    });
-    
+
     if (!dnnFound) {
       console.log('5QI Pulsating Animation: No DNN found in path, continuing anyway');
     }
-    
-    // Create pulsating animation effect with more aggressive styling
+
+    // --- Derive animation params from this node's 5QI values ---
+    const currentQoS = qosValues || (fiveQIId ? getFiveQIValueById(fiveQIId) : null);
+    const animParams: AnimationParams | null = currentQoS ? getAnimationParamsFromQoS(currentQoS) : null;
+
+    // Fallback defaults if we somehow can't resolve 5QI data
+    const p = animParams ?? {
+      strokeWidth: 6, strokeWidthPulse: 9, animationDuration: 1.2,
+      primaryColor: '#f59e0b', secondaryColor: '#ff8c42', tertiaryColor: '#ff6b35',
+      dashArray: '15,10', glowColor: '#f59e0b', glowSize: 5, categoryLabel: 'Standard',
+    };
+
+    // Apply pulsating animation to path edges
     const animateEdgesPulsating = (edgeIds: string[], shouldPulse: boolean) => {
-      console.log('5QI Pulsating Animation: Updating edges', { edgeIds, shouldPulse });
-      
       const updatedEdges = edges.map(edge => {
         if (edgeIds.includes(edge.id)) {
-          const newEdge = {
+          return {
             ...edge,
             animated: shouldPulse,
             style: {
-              stroke: shouldPulse ? '#f59e0b' : '#2563eb', // Orange for pulsating, blue for normal
-              strokeWidth: shouldPulse ? 6 : 3,
-              strokeDasharray: shouldPulse ? '15,10' : undefined,
+              stroke: shouldPulse ? p.primaryColor : '#2563eb',
+              strokeWidth: shouldPulse ? p.strokeWidth : 3,
+              strokeDasharray: shouldPulse ? p.dashArray : undefined,
               opacity: shouldPulse ? 0.9 : 1,
             },
             className: shouldPulse ? 'pulsating-edge' : '',
-            data: {
-              ...edge.data,
-              isPulsating: shouldPulse
-            }
+            data: { ...edge.data, isPulsating: shouldPulse },
           };
-          console.log('5QI Pulsating Animation: Updated edge', { 
-            id: edge.id, 
-            newStyle: newEdge.style,
-            animated: newEdge.animated 
-          });
-          return newEdge;
         }
         return edge;
       });
-      
-      // Force ReactFlow to update
+
       reactFlowInstance.setEdges(updatedEdges);
-      
-      // Also try direct DOM manipulation as backup
+
+      // DOM fallback for zoom-resilience
       setTimeout(() => {
         edgeIds.forEach(edgeId => {
           const edgeElement = document.querySelector(`[data-id="${edgeId}"]`);
-          if (edgeElement) {
-            if (shouldPulse) {
-              // Add pulsating data attribute
-              edgeElement.setAttribute('data-ispulsating', 'true');
-              edgeElement.classList.add('pulsating-edge');
-            } else {
-              edgeElement.removeAttribute('data-ispulsating');
-              edgeElement.classList.remove('pulsating-edge');
-            }
-            
-            const pathElement = edgeElement.querySelector('path');
-            if (pathElement) {
-              if (shouldPulse) {
-                pathElement.style.stroke = '#f59e0b';
-                pathElement.style.strokeWidth = '6px';
-                pathElement.style.strokeDasharray = '20,15';
-                pathElement.style.animation = 'pulse-flow 1.2s ease-in-out infinite';
-                pathElement.style.strokeLinecap = 'round';
-                pathElement.style.vectorEffect = 'non-scaling-stroke';
-                pathElement.style.opacity = '0.9';
-              } else {
-                // Reset to default styles
-                pathElement.style.stroke = '#2563eb';
-                pathElement.style.strokeWidth = '3px';
-                pathElement.style.strokeDasharray = '';
-                pathElement.style.animation = '';
-                pathElement.style.strokeLinecap = '';
-                pathElement.style.vectorEffect = '';
-                pathElement.style.opacity = '1';
-              }
-              console.log('5QI Pulsating Animation: Applied direct DOM styling to', edgeId, 'shouldPulse:', shouldPulse);
-            }
+          if (!edgeElement) return;
+          if (shouldPulse) {
+            edgeElement.setAttribute('data-ispulsating', 'true');
+            edgeElement.classList.add('pulsating-edge');
+          } else {
+            edgeElement.removeAttribute('data-ispulsating');
+            edgeElement.classList.remove('pulsating-edge');
+          }
+          const pathEl = edgeElement.querySelector('path');
+          if (!pathEl) return;
+          if (shouldPulse) {
+            pathEl.style.stroke = p.primaryColor;
+            pathEl.style.strokeWidth = `${p.strokeWidth}px`;
+            pathEl.style.strokeDasharray = p.dashArray;
+            pathEl.style.animation = `pulse-flow ${p.animationDuration}s ease-in-out infinite`;
+            pathEl.style.strokeLinecap = 'round';
+            pathEl.style.vectorEffect = 'non-scaling-stroke';
+            pathEl.style.opacity = '0.9';
+          } else {
+            pathEl.style.stroke = '#2563eb';
+            pathEl.style.strokeWidth = '3px';
+            pathEl.style.strokeDasharray = '';
+            pathEl.style.animation = '';
+            pathEl.style.strokeLinecap = '';
+            pathEl.style.vectorEffect = '';
+            pathEl.style.opacity = '1';
           }
         });
       }, 100);
     };
-    
-    // Determine if animation should be active based on conditions
+
     const shouldAnimate = hasDefaultQoSFlow && dnnActivated && pathEdgesArray.length > 0;
-    
+
     if (pathEdgesArray.length === 0) {
-      console.log('5QI Pulsating Animation: No path found, stopping any existing animations');
-      // Stop animation on all edges to clear any existing animations
       const allEdgeIds = edges.map(edge => edge.id);
       animateEdgesPulsating(allEdgeIds, false);
     } else {
-      // Start or stop pulsating animation on the specific path
       animateEdgesPulsating(pathEdgesArray, shouldAnimate);
     }
-    
-    console.log(`5QI Pulsating Animation: ${shouldAnimate ? 'Started' : 'Stopped'} for ${pathEdgesArray.length} edges from 5QI to network`);
-    
-    // Add enhanced CSS for pulsating effect with zoom-independent animation
+
+    console.log(`5QI Pulsating Animation: ${shouldAnimate ? 'Started' : 'Stopped'} – ${p.categoryLabel}, duration=${p.animationDuration}s, width=${p.strokeWidth}px`);
+
+    // --- Inject dynamic CSS keyframes driven by 5QI parameters ---
     const style = document.createElement('style');
     style.textContent = `
       @keyframes pulse-flow {
-        0% { 
+        0% {
           opacity: 0.7;
-          stroke: #f59e0b !important;
-          stroke-width: 5px !important;
+          stroke: ${p.primaryColor} !important;
+          stroke-width: ${p.strokeWidth}px !important;
         }
-        25% { 
+        25% {
           opacity: 0.85;
-          stroke: #ff8c42 !important;
-          stroke-width: 7px !important;
+          stroke: ${p.secondaryColor} !important;
+          stroke-width: ${Math.round((p.strokeWidth + p.strokeWidthPulse) / 2)}px !important;
         }
-        50% { 
+        50% {
           opacity: 1;
-          stroke: #ff6b35 !important;
-          stroke-width: 9px !important;
+          stroke: ${p.tertiaryColor} !important;
+          stroke-width: ${p.strokeWidthPulse}px !important;
         }
-        75% { 
+        75% {
           opacity: 0.85;
-          stroke: #ff8c42 !important;
-          stroke-width: 7px !important;
+          stroke: ${p.secondaryColor} !important;
+          stroke-width: ${Math.round((p.strokeWidth + p.strokeWidthPulse) / 2)}px !important;
         }
-        100% { 
+        100% {
           opacity: 0.7;
-          stroke: #f59e0b !important;
-          stroke-width: 5px !important;
+          stroke: ${p.primaryColor} !important;
+          stroke-width: ${p.strokeWidth}px !important;
         }
       }
-      
+
       @keyframes pulse-glow {
-        0% { 
-          filter: drop-shadow(0 0 3px #f59e0b);
-        }
-        50% { 
-          filter: drop-shadow(0 0 8px #ff6b35);
-        }
-        100% { 
-          filter: drop-shadow(0 0 3px #f59e0b);
-        }
+        0%   { filter: drop-shadow(0 0 ${Math.round(p.glowSize * 0.4)}px ${p.glowColor}); }
+        50%  { filter: drop-shadow(0 0 ${p.glowSize}px ${p.glowColor}); }
+        100% { filter: drop-shadow(0 0 ${Math.round(p.glowSize * 0.4)}px ${p.glowColor}); }
       }
-      
-      /* Target ReactFlow edges with pulsating class - zoom independent */
+
       .react-flow__edge.pulsating-edge path,
       .react-flow__edges .pulsating-edge path,
       .pulsating-edge path {
-        stroke: #f59e0b !important;
-        stroke-width: 6px !important;
-        stroke-dasharray: 20,15 !important;
-        animation: pulse-flow 1.2s ease-in-out infinite !important;
+        stroke: ${p.primaryColor} !important;
+        stroke-width: ${p.strokeWidth}px !important;
+        stroke-dasharray: ${p.dashArray} !important;
+        animation: pulse-flow ${p.animationDuration}s ease-in-out infinite !important;
         stroke-linecap: round !important;
         vector-effect: non-scaling-stroke !important;
       }
-      
-      /* Add glow effect separately to avoid zoom issues */
+
       .react-flow__edge.pulsating-edge,
       .react-flow__edges .pulsating-edge,
       .pulsating-edge {
-        animation: pulse-glow 1.2s ease-in-out infinite !important;
+        animation: pulse-glow ${p.animationDuration}s ease-in-out infinite !important;
       }
-      
-      /* Force animation on any edge with pulsating data */
-      [data-id*="pulsating"] path,
+
       .react-flow__edge[data-ispulsating="true"] path {
-        stroke: #f59e0b !important;
-        stroke-width: 6px !important;
-        stroke-dasharray: 20,15 !important;
-        animation: pulse-flow 1.2s ease-in-out infinite !important;
+        stroke: ${p.primaryColor} !important;
+        stroke-width: ${p.strokeWidth}px !important;
+        stroke-dasharray: ${p.dashArray} !important;
+        animation: pulse-flow ${p.animationDuration}s ease-in-out infinite !important;
         stroke-linecap: round !important;
         vector-effect: non-scaling-stroke !important;
       }
-      
-      /* Ensure visibility at all zoom levels */
+
       .react-flow__viewport .pulsating-edge path {
-        stroke: #f59e0b !important;
-        stroke-width: 6px !important;
-        stroke-dasharray: 20,15 !important;
-        animation: pulse-flow 1.2s ease-in-out infinite !important;
+        stroke: ${p.primaryColor} !important;
+        stroke-width: ${p.strokeWidth}px !important;
+        stroke-dasharray: ${p.dashArray} !important;
+        animation: pulse-flow ${p.animationDuration}s ease-in-out infinite !important;
         stroke-linecap: round !important;
         vector-effect: non-scaling-stroke !important;
         opacity: 0.9 !important;
       }
     `;
-    
-    // Remove existing styles first
+
     const existingStyle = document.querySelector('#pulsating-animation-styles');
-    if (existingStyle) {
-      existingStyle.remove();
-    }
-    
+    if (existingStyle) existingStyle.remove();
+
     style.id = 'pulsating-animation-styles';
     document.head.appendChild(style);
-    console.log('5QI Pulsating Animation: Added enhanced CSS styles with !important');
-    
-  }, [reactFlowInstance, data.nodeId, clearAllPulsatingAnimations]);
+
+  }, [reactFlowInstance, data.nodeId, clearAllPulsatingAnimations, qosValues, fiveQIId]);
 
   // Check for pulsating animation when component mounts or when QoS Flow nodes change
   useEffect(() => {
@@ -512,18 +436,63 @@ const FiveQiNode = memo(({ id, data }: FiveQiNodeProps) => {
         {displayValues.service}
       </div>
       
-      {/* Display QoS parameters in a more visible format */}
+      {/* Display QoS parameters with visual indicators */}
       <div className="mt-4 text-xl bg-white/70 p-3 rounded shadow-sm">
         <div className="grid grid-cols-2 gap-x-2 gap-y-1.5">
           <span className="font-semibold text-gray-900">Type:</span>
-          <span className="text-gray-900">{displayValues.resourceType}</span>
-          
+          <span className={`font-medium ${displayValues.resourceType === 'GBR' ? 'text-blue-700' : 'text-purple-700'}`}>
+            {displayValues.resourceType}
+          </span>
+
           <span className="font-semibold text-gray-900">Priority:</span>
           <span className="text-gray-900">{displayValues.priority}</span>
-          
+
           <span className="font-semibold text-gray-900">Delay:</span>
           <span className="text-gray-900">{displayValues.packetDelay}</span>
         </div>
+
+        {/* Visual throughput / latency indicators */}
+        {(() => {
+          const ap = getAnimationParamsFromQoS(displayValues);
+          const delayMs = parseInt(displayValues.packetDelay) || 100;
+          // Latency bar: lower delay → more filled (inverted)
+          const latencyPct = Math.max(5, Math.min(100, Math.round(100 - (delayMs / 5))));
+          // Throughput bar: GBR with low priority → high throughput
+          const pri = parseInt(displayValues.priority) || 50;
+          const throughputPct = Math.max(10, Math.min(100, Math.round(100 - pri)));
+          return (
+            <div className="col-span-2 mt-2 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-600 w-[70px]">Latency</span>
+                <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${latencyPct}%`, backgroundColor: ap.primaryColor }}
+                  />
+                </div>
+                <span className="text-xs text-gray-500 w-[45px] text-right">{displayValues.packetDelay}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-600 w-[70px]">Throughput</span>
+                <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${throughputPct}%`, backgroundColor: ap.primaryColor }}
+                  />
+                </div>
+                <span className="text-xs text-gray-500 w-[45px] text-right">P{displayValues.priority}</span>
+              </div>
+              <div className="text-center mt-1">
+                <span
+                  className="inline-block text-xs font-bold px-2 py-0.5 rounded-full text-white"
+                  style={{ backgroundColor: ap.primaryColor }}
+                >
+                  {ap.categoryLabel}
+                </span>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
 
